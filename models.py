@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi import HTTPException
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 
 
 class Team(BaseModel):
@@ -15,4 +15,4 @@ class Competition(BaseModel):
     name: str
     category: str
     sport: str
-    teams: list
+    teams: List

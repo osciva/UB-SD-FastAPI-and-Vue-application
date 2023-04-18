@@ -113,12 +113,12 @@ async def read_competitions(skip: int = 0, limit: int = 10):
     return fake_competitions_db[skip: skip + limit]
 
 #obtenir una competició amb un cert nom (no crec que fagi falta però a l'enunciat no ho deixa clar)
-@app.get("/competitions/{competition_name}")
-async def read_competition(competition_name: str):
-    competition = next(iter([x for x in fake_competitions_db if x.name == competition_name]), None)
-    if not competition:
-        raise HTTPException(status_code=404, detail="Competition not found")
-    return competition
+#@app.get("/competitions/{competition_name}")
+#async def read_competition(competition_name: str):
+    #competition = next(iter([x for x in fake_competitions_db if x.name == competition_name]), None)
+    #if not competition:
+        #raise HTTPException(status_code=404, detail="Competition not found")
+    #return competition
 
 
 #obtenir una competició amb un cert id
@@ -137,9 +137,9 @@ async def create_competition(competition: Competition):
     return competition
 
 #actualitzar una competició amb un cert id
-@app.put("/competitions/{competition_id}")
-async def update_competition(competition_id: int, competition: Competition):
-    competition_index = next((index for (index, c) in enumerate(fake_competitions_db) if c.id == competition_id), None)
+@app.put("/competitions/{competition_name}")
+async def update_competition(competition_name: str, competition: Competition):
+    competition_index = next((index for (index, c) in enumerate(fake_competitions_db) if c.name == competition_name), None)
     if competition_index is None:
         raise HTTPException(status_code=404, detail="Competition not found")
     fake_competitions_db[competition_index] = competition
