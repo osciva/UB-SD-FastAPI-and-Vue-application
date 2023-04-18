@@ -9,3 +9,10 @@ class Team(BaseModel):
     country: str
     description: Optional[str] = None
 
+
+class Competition(BaseModel):
+    id: int
+    name: str
+    category: str
+    sport: str
+    teams: list
