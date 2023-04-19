@@ -123,9 +123,6 @@ def test_update_competition():
 
 
 
-
-
-
 # Test para eliminar una competición (este con el id va y el anterior no... en fin)
 def test_delete_competition():
     # Crear una competición para luego borrarla
@@ -143,4 +140,95 @@ def test_delete_competition():
 
     # Y comprobar ya no están sus datos
     response = client.get("/competitions/5")
+    assert response.status_code == 404
+
+
+
+
+# Test para crear un match
+def test_create_match():
+    # Crear y añadir match
+    new_macth2 = {'id': 2,
+     'local': "UBSport",
+     'visitor': 'UPC sport',
+     'date': '2023-04-15',
+     'price': 40.20}
+    response = client.post("/matches/", json=new_macth2)
+    assert response.status_code == 200
+    assert response.json() == new_macth2
+
+# Test de encontrar un match a traves de su id
+def test_read_match_by_id():
+    # Agregar match de prueba
+    new_match ={'id': 1,
+     'local': "UBSport",
+     'visitor': 'UPC sport',
+     'date': '2023-04-15',
+     'price': 40.20}
+    response = client.post("/matches/", json=new_match)
+    assert response.status_code == 200
+    assert response.json() == new_match
+
+    # Acceder al match creado
+    response2 = client.get("/matches/1")
+    assert response2.status_code == 200
+    assert response2.json() == new_match
+
+
+
+# Test para actualizar un match
+def test_update_match():
+    # Crear un match para actualizarlo después
+    new_match3 = {'id': 3,
+     'local': "Espanyol",
+     'visitor': 'Barça',
+     'date': '2023-05-14',
+     'price': 95.50}
+    response = client.post("/matches/", json=new_match3)
+    assert response.status_code == 200
+    assert response.json() == new_match3
+    assert response.json()["id"] == 3
+    assert response.json()["local"] == "Espanyol"
+    assert response.json()["visitor"] == "Barça"
+    assert response.json()["date"] == "2023-05-14"
+    assert response.json()["price"] == 95.50
+
+    # Actualizar el match
+    updated_match3 = {'id': 3,
+     'local': "Espanyol",
+     'visitor': 'Girona',
+     'date': '2023-05-14',
+     'price': 66.50}
+    # PROBLEMA: el servidor no puede entender la solicitud del
+    # cliente debido a un error en la sintaxis o formato de los datos enviados.
+    response = client.put("/matches/3", json=updated_match3)
+
+    assert response.status_code == 200
+    assert response.json()["id"] == 3
+    assert response.json()["local"] == "Espanyol"
+    assert response.json()["visitor"] == "Girona"
+    assert response.json()["date"] == "2023-05-14"
+    assert response.json()["price"] == 66.50
+
+# Test para eliminar un match
+def test_delete_match():
+    # Crear una match para luego borrarla
+    new_match4 = {'id': 4,
+     'local': "Sevilla",
+     'visitor': 'Getafe',
+     'date': '2023-01-10',
+     'price': 16.50}
+    response = client.post("/matches/", json=new_match4)
+    assert response.status_code == 200
+    assert response.json() == new_match4
+
+    # Borrar el match
+    response = client.delete("/matches/4")
+
+    # Comprobar que se ha eliminado correctamente
+    assert response.status_code == 200
+    assert response.json() == {"message": "4 has been deleted successfully."}
+
+    # Y comprobar ya no están sus datos
+    response = client.get("/matches/4")
     assert response.status_code == 404
