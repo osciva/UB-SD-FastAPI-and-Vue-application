@@ -16,3 +16,10 @@ class Competition(BaseModel):
     category: str
     sport: str
     teams: List
+
+class Match(BaseModel):
+    id: int
+    local: str
+    visitor: str
+    date: str
+    price: float

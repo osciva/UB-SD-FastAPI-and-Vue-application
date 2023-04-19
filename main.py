@@ -4,6 +4,7 @@ from fastapi import HTTPException
 import models
 from models import Team
 from models import Competition
+from models import Match
 
 app = FastAPI()
 
@@ -154,3 +155,52 @@ async def delete_competition(competition_id: int):
         raise HTTPException(status_code=404, detail="Competition not found")
     del fake_competitions_db[competition_index]
     return {"message": f"{competition_id} has been deleted successfully."}
+
+
+fake_matches_db = []
+
+# Llegim els matches
+@app.get("/matches/")
+async def read_matches(skip: int = 0, limit: int = 10):
+    return fake_matches_db[skip: skip + limit]
+
+# Creem un match
+@app.post("/matches/")
+async def create_competition(match: Match):
+
+    fake_matches_db.append(match)
+    return match
+
+
+# Obtenim un match amb un cert id
+@app.get("/matches/{match_id}")
+async def read_match(matches_id: int):
+    match = next((mat for mat in fake_matches_db if mat.id == matches_id), None)
+    if match is None:
+        raise HTTPException(status_code=404, detail="Match not found")
+    return match
+
+
+# Actualitzem un match amb un cert id
+@app.put("/matches/{match_id}")
+async def update_competition(match_id: int, match: Match):
+    #match_index = next((index for (index, c) in enumerate(fake_matches_db) if c.id == match_id), None)
+    #if match_index is None:
+    #    raise HTTPException(status_code=404, detail="Competition not found")
+    #fake_matches_db[match_index] = match
+    #return match
+    match_index = next((mat for mat in fake_matches_db if mat.id == match_id), None)
+    if match_index is None:
+        raise HTTPException(status_code=404, detail="Match not found")
+    fake_matches_db[match_index] = match
+    return match
+
+#eliminar una competició amb un cert id
+@app.delete("/matches/{match_id}")
+async def delete_competition(match_id: int):
+    global fake_matches_db
+    match_index = next((index for (index, c) in enumerate(fake_matches_db) if c.id == match_id), None)
+    if match_index is None:
+        raise HTTPException(status_code=404, detail="Competition not found")
+    del fake_matches_db[match_index]
+    return {"message": f"{match_id} has been deleted successfully."}
