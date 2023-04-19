@@ -164,43 +164,36 @@ fake_matches_db = []
 async def read_matches(skip: int = 0, limit: int = 10):
     return fake_matches_db[skip: skip + limit]
 
-# Creem un match
-@app.post("/matches/")
-async def create_competition(match: Match):
-
-    fake_matches_db.append(match)
-    return match
-
-
 # Obtenim un match amb un cert id
 @app.get("/matches/{match_id}")
-async def read_match(matches_id: int):
-    match = next((mat for mat in fake_matches_db if mat.id == matches_id), None)
+async def read_match(match_id: int):
+    match = next((mat for mat in fake_matches_db if mat.id == match_id), None)
     if match is None:
         raise HTTPException(status_code=404, detail="Match not found")
     return match
 
+# Creem un match
+@app.post("/matches/")
+async def create_match(match: Match):
+    fake_matches_db.append(match)
+    return match
 
 # Actualitzem un match amb un cert id
 @app.put("/matches/{match_id}")
-async def update_competition(match_id: int, match: Match):
-    #match_index = next((index for (index, c) in enumerate(fake_matches_db) if c.id == match_id), None)
-    #if match_index is None:
-    #    raise HTTPException(status_code=404, detail="Competition not found")
-    #fake_matches_db[match_index] = match
-    #return match
-    match_index = next((mat for mat in fake_matches_db if mat.id == match_id), None)
-    if match_index is None:
-        raise HTTPException(status_code=404, detail="Match not found")
-    fake_matches_db[match_index] = match
-    return match
+async def update_match(match_id: int, match: Match):
+    for i, m in enumerate(fake_matches_db):
+        if m.id == match_id:
+            fake_matches_db[i] = match
+            return match
+    raise HTTPException(status_code=404, detail="Match not found")
+
 
 #eliminar una competició amb un cert id
 @app.delete("/matches/{match_id}")
-async def delete_competition(match_id: int):
+async def delete_match(match_id: int):
     global fake_matches_db
     match_index = next((index for (index, c) in enumerate(fake_matches_db) if c.id == match_id), None)
     if match_index is None:
-        raise HTTPException(status_code=404, detail="Competition not found")
+        raise HTTPException(status_code=404, detail="Match not found")
     del fake_matches_db[match_index]
     return {"message": f"{match_id} has been deleted successfully."}

@@ -122,9 +122,6 @@ def test_update_competition():
 
 
 
-
-
-
 # Test para eliminar una competición (este con el id va y el anterior no... en fin)
 def test_delete_competition():
     # Crear una competición para luego borrarla
@@ -144,6 +141,21 @@ def test_delete_competition():
     response = client.get("/competitions/5")
     assert response.status_code == 404
 
+
+
+
+# Test para crear un match
+def test_create_match():
+    # Crear y añadir match
+    new_macth2 = {'id': 2,
+     'local': "UBSport",
+     'visitor': 'UPC sport',
+     'date': '2023-04-15',
+     'price': 40.20}
+    response = client.post("/matches/", json=new_macth2)
+    assert response.status_code == 200
+    assert response.json() == new_macth2
+
 # Test de encontrar un match a traves de su id
 def test_read_match_by_id():
     # Agregar match de prueba
@@ -158,21 +170,9 @@ def test_read_match_by_id():
 
     # Acceder al match creado
     response2 = client.get("/matches/1")
-    #PROBLEMA: no entiende el ID en la URL?
     assert response2.status_code == 200
     assert response2.json() == new_match
 
- # Test para crear un match
-def test_create_match():
-    # Crear y añadir match
-    new_macth2 = {'id': 2,
-     'local': "UBSport",
-     'visitor': 'UPC sport',
-     'date': '2023-04-15',
-     'price': 40.20}
-    response = client.post("/matches/", json=new_macth2)
-    assert response.status_code == 200
-    assert response.json() == new_macth2
 
 
 # Test para actualizar un match
