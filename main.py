@@ -1,13 +1,44 @@
-from fastapi import FastAPI
-from fastapi import HTTPException
 
-import models
-from models import Team
-from models import Competition
-from models import Match
+from fastapi import Depends, FastAPI, HTTPException
+from sqlalchemy.orm import Session
+
+import repository, models, schemas
+from database import SessionLocal, engine
+from typing import List
+
+
+
+
+models.Base.metadata.create_all(bind=engine) # Creem la base de dades amb els models que hem definit a SQLAlchemy
 
 app = FastAPI()
 
+# Dependency to get a DB session
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+@app.get("/teams/", response_model=List[schemas.Team])
+def read_teams(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    return repository.get_teams(db, skip=skip, limit=limit)
+
+@app.post("/teams/", response_model=schemas.Team)
+def create_team(team: schemas.TeamCreate,db: Session = Depends(get_db)):
+    db_team = repository.get_team_by_name(db, name=team.name)
+    if db_team:
+        raise HTTPException(status_code=400, detail="Team already Exists, Use put for updating")
+    else:
+        return repository.create_team(db=db, team=team)
+
+@app.get("/team/{team_name}", response_model=schemas.Team)
+def read_team(team_name: str,db: Session = Depends(get_db)):
+    team = repository.get_team_by_name(db, name=team_name)
+    if not team:
+        raise HTTPException(status_code=404, detail="Team not found")
+    return team
 
 @app.get("/")
 async def root():
@@ -27,17 +58,6 @@ def like_python():
 fake_teams_db = []
 
 
-@app.get("/teams/")
-async def read_teams(skip: int = 0, limit: int = 10):
-    return fake_teams_db[skip: skip + limit]
-
-
-@app.get("/team/{team_name}")
-async def read_team(team_name: str):
-    team = next(iter([x for x in fake_teams_db if x["team_name"] == team_name]), None)
-    if not team:
-        raise HTTPException(status_code=404, detail="Team not found")
-    return {'team': team_name}
 
 
 @app.get("/users/me")
@@ -49,18 +69,6 @@ async def read_user_me():
 async def read_user(user_id: str):
     return {"user_id": user_id}
 
-
-@app.post("/teams/")
-async def create_team(team: Team):
-    if not fake_teams_db:
-        fake_teams_db.append(team)
-    else:
-        exists_team = next(iter([x for x in fake_teams_db if x.name == team.name]), None)
-        if not exists_team:
-            fake_teams_db.append(team)
-        else:
-            raise HTTPException(status_code=404, detail="Team already Exists, Use put for updating")
-    return team
 
 
 @app.delete("/teams/{team_name}")
@@ -77,7 +85,7 @@ async def delete_team(team_name: str):
 
 
 @app.put("/teams/{team_id}")
-async def update_team(team_id: int, team: Team):
+async def update_team(team_id: int, team: schemas.Team):
     if not fake_teams_db:
         fake_teams_db.append(team)
         return team
@@ -92,7 +100,7 @@ async def update_team(team_id: int, team: Team):
 
 
 @app.put("/team/{team_name}")
-async def update_team(team_name: str, team: models.Team):
+async def update_team(team_name: str, team: schemas.Team):
     existing_team = next(iter([x for x in fake_teams_db if x.name == team_name]), None)
 
     if not existing_team:
@@ -132,14 +140,14 @@ async def read_competition(competition_id: int):
 
 #crear una competició
 @app.post("/competitions/")
-async def create_competition(competition: Competition):
+async def create_competition(competition: schemas.Competition):
 
     fake_competitions_db.append(competition)
     return competition
 
 #actualitzar una competició amb un cert id
 @app.put("/competitions/{competition_name}")
-async def update_competition(competition_name: str, competition: Competition):
+async def update_competition(competition_name: str, competition: schemas.Competition):
     competition_index = next((index for (index, c) in enumerate(fake_competitions_db) if c.name == competition_name), None)
     if competition_index is None:
         raise HTTPException(status_code=404, detail="Competition not found")
@@ -174,13 +182,13 @@ async def read_match(match_id: int):
 
 # Creem un match
 @app.post("/matches/")
-async def create_match(match: Match):
+async def create_match(match: schemas.Match):
     fake_matches_db.append(match)
     return match
 
 # Actualitzem un match amb un cert id
 @app.put("/matches/{match_id}")
-async def update_match(match_id: int, match: Match):
+async def update_match(match_id: int, match: schemas.Match):
     for i, m in enumerate(fake_matches_db):
         if m.id == match_id:
             fake_matches_db[i] = match
