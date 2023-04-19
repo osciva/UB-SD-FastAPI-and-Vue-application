@@ -40,6 +40,7 @@ def test_delete_team():
     assert {"name": "Barça"} not in response.json()
 
 
+
 def test_update_team():
     # Crear un equipo para actualizar
     client.post("/team", json={"name": "Real Madrid", "country": "Spain", "description": "The Kings of Europe"})
