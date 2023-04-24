@@ -1,7 +1,7 @@
+import models
+from main import app, get_db
 from fastapi.testclient import TestClient
-
-from main import app
-
+import schemas
 client = TestClient(app)
 
 def test_read_main():
@@ -9,35 +9,49 @@ def test_read_main():
     assert response.status_code == 200
     assert response.json() == {"message": "Hello World"}
 
-def test_create_team():
-    # Creamos un equipo nuevo
-    new_team = {"name": "Barcelona", "country": "Catalonia", "description": "Futbol Team"}
-    response = client.post("/teams/", json=new_team)
 
-    # Comprobamos que la respuesta es correcta
+def test_create_team():
+    # Crea un equipo
+    team = {"name": "Barça", "country": "Catalonia", "description": "Futbol Team"}
+    response = client.post("/teams/", json=team)
     assert response.status_code == 200
-    assert response.json() == new_team
+
+    # Verifica que la respuesta tenga la información correcta del equipo creado
+    assert response.json()["name"] == team.name
+    assert response.json()["country"] == team.country
+    assert response.json()["description"] == team.description
+
+    # Verifica que el equipo se haya creado correctamente en la base de datos
+    db = next(get_db())
+    created_team = db.query(models.Team).filter(models.Team.name == team.name).first()
+    assert created_team is not None
+    assert created_team.name == team.name
+    assert created_team.country == team.country
+    assert created_team.description == team.description
+
+    # Borra el equipo creado para no afectar otros tests
+    db.delete(created_team)
+    db.commit()
+
 
 
 def test_delete_team():
-    # Creamos un equipo nuevo
-    new_team = {"name": "Barça", "country": "Catalonia", "description": "Futbol Team"}
-    response = client.post("/teams/", json=new_team)
+    # Crea un equipo para eliminar
+    team = {"name": "Barça", "country": "Catalonia", "description": "Futbol Team"}
+    response = client.post("/teams/", json=team)
+    assert response.status_code == 200
 
-    # Comprobamos que la respuesta es correcta
+    # Elimina el equipo creado
+    response = client.delete(f"/teams/{team['name']}")
     assert response.status_code == 200
-    assert response.json() == new_team
-    # eliminem al barça
-    team_name = "Barça"
-    response = client.delete(f"/teams/{team_name}")
-    assert response.status_code == 200
-    assert response.json() == {"message": f"{team_name} has been deleted successfully."}
+    assert response.json()["message"] == f"{team['name']} has been deleted successfully."
 
-    # comprovem que no estigui
-    response = client.get("/teams/")
-    assert response.status_code == 200
-    assert len(response.json()) == 1
-    assert {"name": "Barça"} not in response.json()
+    # Verifica que el equipo se haya eliminado correctamente de la base de datos
+    db = next(get_db())
+    deleted_team = db.query(models.Team).filter(models.Team.name == team['name']).first()
+    assert deleted_team is None
+
+
 
 
 def test_update_team():
