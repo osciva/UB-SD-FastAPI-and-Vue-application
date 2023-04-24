@@ -71,98 +71,73 @@ async def read_user(user_id: str):
 
 
 
-@app.delete("/teams/{team_name}")
-async def delete_team(team_name: str):
-    global fake_teams_db
-    team_index = next((index for (index, team) in enumerate(fake_teams_db) if team.name == team_name), None)
 
 
-    if team_index is not None:
-        del fake_teams_db[team_index]
-        return {"message": f"{team_name} has been deleted successfully."}
-    else:
+@app.delete("/teams/{team_name}", response_model=schemas.Team)
+def delete_team(team_name: str, team: schemas.Team, db: Session = Depends(get_db)):
+    team = repository.get_team_by_name(db, name=team.name)
+    if not team:
         raise HTTPException(status_code=404, detail="Team not found")
+    repository.delete_team(db=db,team_name=team.name)
+    return {"message": f"{team_name} has been deleted successfully."}
 
-
-@app.put("/teams/{team_id}")
-async def update_team(team_id: int, team: schemas.Team):
-    if not fake_teams_db:
-        fake_teams_db.append(team)
-        return team
+@app.put("/teams/{team_id}", response_model=schemas.Team)
+def update_team(team_id: int, team: schemas.TeamCreate, db: Session = Depends(get_db)):
+    db_team = repository.get_team(db=db, team_id=team_id)
+    if not db_team:
+        db_team = repository.create_team(db=db, team=team)
     else:
-        for idx, t in enumerate(fake_teams_db):
-            if t.id == team_id:
-                fake_teams_db[idx] = team
-                return team
-        else:
-            fake_teams_db.append(team)
-            return team
+        db_team = repository.update_team(db=db, team_name=db_team.name, team=team)
+    return db_team
 
-
-@app.put("/team/{team_name}")
-async def update_team(team_name: str, team: schemas.Team):
-    existing_team = next(iter([x for x in fake_teams_db if x.name == team_name]), None)
-
-    if not existing_team:
-        # Si el equipo no existe, lo crea y lo añade a la lista
-        new_team = {'team_name': team_name, 'name': team.name, 'country': team.country, 'description': team.description}
-        fake_teams_db.append(new_team)
-        return new_team
+@app.put("/team/{team_name}", response_model=schemas.Team)
+def update_team_by_name(team_name: str, team: schemas.TeamCreate, db: Session = Depends(get_db)):
+    db_team = repository.get_team_by_name(db=db, name=team_name)
+    if not db_team:
+        db_team = repository.create_team(db=db, team=team)
     else:
-        # Si el equipo existe, actualiza los valores del equipo
-        existing_team.update({'name': team.name, 'country': team.country, 'description': team.description})
-        return existing_team
+        db_team = repository.update_team(db=db, team_name=db_team.name, team=team)
+    return db_team
+
 
 fake_competitions_db = []
 
 
 #llegir les competicions
-@app.get("/competitions/")
-async def read_competitions(skip: int = 0, limit: int = 10):
-    return fake_competitions_db[skip: skip + limit]
+@app.get("/competitions/", response_model=schemas.Competition)
+def read_competitions(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    return repository.get_competitions(db, skip=skip, limit=limit)
 
-#obtenir una competició amb un cert nom (no crec que fagi falta però a l'enunciat no ho deixa clar)
-#@app.get("/competitions/{competition_name}")
-#async def read_competition(competition_name: str):
-    #competition = next(iter([x for x in fake_competitions_db if x.name == competition_name]), None)
-    #if not competition:
-        #raise HTTPException(status_code=404, detail="Competition not found")
-    #return competition
+@app.post("/competitions/", response_model=schemas.Competition)
+def create_competition(competition: schemas.CompetitionCreate, db: Session = Depends(get_db)):
+    return repository.create_competition(db=db, competition=competition)
 
-
-#obtenir una competició amb un cert id
-@app.get("/competitions/{competition_id}")
-async def read_competition(competition_id: int):
-    competition = next((comp for comp in fake_competitions_db if comp.id == competition_id), None)
-    if competition is None:
+@app.get("/competitions/{competition_id}", response_model=schemas.Competition)
+def read_competition(competition_id: int, db: Session = Depends(get_db)):
+    db_competition = repository.get_competition(db, competition_id=competition_id)
+    if db_competition is None:
         raise HTTPException(status_code=404, detail="Competition not found")
-    return competition
-
-#crear una competició
-@app.post("/competitions/")
-async def create_competition(competition: schemas.Competition):
-
-    fake_competitions_db.append(competition)
-    return competition
+    return db_competition
 
 #actualitzar una competició amb un cert id
-@app.put("/competitions/{competition_name}")
-async def update_competition(competition_name: str, competition: schemas.Competition):
-    competition_index = next((index for (index, c) in enumerate(fake_competitions_db) if c.name == competition_name), None)
-    if competition_index is None:
+@app.put("/competitions/{competition_name}", response_model=schemas.Competition)
+def update_competition(competition_name: str, competition: schemas.CompetitionCreate, db: Session = Depends(get_db)):
+    db_competition = repository.get_competition_by_name(db=db, name=competition_name)
+    if not db_competition:
         raise HTTPException(status_code=404, detail="Competition not found")
-    fake_competitions_db[competition_index] = competition
-    return competition
+    updated_competition = repository.update_competition(db=db, competition_id=db_competition.id, competition=competition)
+    return updated_competition
+
 
 #eliminar una competició amb un cert id
-@app.delete("/competitions/{competition_id}")
-async def delete_competition(competition_id: int):
-    global fake_competitions_db
-    competition_index = next((index for (index, c) in enumerate(fake_competitions_db) if c.id == competition_id), None)
-    if competition_index is None:
+@app.delete("/competitions/{competition_name}", response_model=schemas.Competition)
+def delete_competition(competition_name: str, db: Session = Depends(get_db)):
+    competition = repository.get_competition_by_name(db, name=competition_name)
+    if not competition:
         raise HTTPException(status_code=404, detail="Competition not found")
-    del fake_competitions_db[competition_index]
-    return {"message": f"{competition_id} has been deleted successfully."}
+    repository.delete_competition(db=db, competition_id=competition.id)
+    return {"message": f"{competition_name} has been deleted successfully."}
+
 
 
 fake_matches_db = []
