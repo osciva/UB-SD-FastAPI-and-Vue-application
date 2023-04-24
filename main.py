@@ -110,8 +110,18 @@ def read_competitions(skip: int = 0, limit: int = 10, db: Session = Depends(get_
 
 @app.post("/competitions/", response_model=schemas.Competition)
 def create_competition(competition: schemas.CompetitionCreate, db: Session = Depends(get_db)):
-    return repository.create_competition(db=db, competition=competition)
+    db_competition = repository.get_competition_by_name(db, name=competition.name)
+    if db_competition:
+        raise HTTPException(status_code=400, detail="Competition already exists, use PUT for updating")
+    else:
+        return repository.create_competition(db=db, competition=competition)
 
+@app.get("/competition/{competition_name}", response_model=schemas.Competition)
+def read_competition_by_name(competition_name: str, db: Session = Depends(get_db)):
+    competition = repository.get_competition_by_name(db, name=competition_name)
+    if not competition:
+        raise HTTPException(status_code=404, detail="Competition not found")
+    return competition
 @app.get("/competitions/{competition_id}", response_model=schemas.Competition)
 def read_competition(competition_id: int, db: Session = Depends(get_db)):
     db_competition = repository.get_competition(db, competition_id=competition_id)
@@ -143,23 +153,31 @@ def delete_competition(competition_name: str, db: Session = Depends(get_db)):
 fake_matches_db = []
 
 # Llegim els matches
-@app.get("/matches/")
-async def read_matches(skip: int = 0, limit: int = 10):
-    return fake_matches_db[skip: skip + limit]
+@app.get("/matches/", response_model=List[schemas.Match])
+def read_matches(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    return repository.get_matches(db, skip=skip, limit=limit)
 
-# Obtenim un match amb un cert id
-@app.get("/matches/{match_id}")
-async def read_match(match_id: int):
-    match = next((mat for mat in fake_matches_db if mat.id == match_id), None)
-    if match is None:
+
+@app.post("/matches/", response_model=schemas.Match)
+def create_match(match: schemas.MatchCreate, db: Session = Depends(get_db)):
+    # En principio se pueden repetir nomrbes, deberiamos controlar, que no haya un mismo equipo jugando el mismo date
+    db_match = repository.create_match(db=db, match=match)
+    return db_match
+
+@app.get("/matches/{match_id}", response_model=schemas.Match)
+def read_match_by_id(match_id: int, db: Session = Depends(get_db)):
+    match = repository.get_match_by_id(db, match_id=match_id)
+    if not match:
         raise HTTPException(status_code=404, detail="Match not found")
     return match
 
-# Creem un match
-@app.post("/matches/")
-async def create_match(match: schemas.Match):
-    fake_matches_db.append(match)
-    return match
+@app.get("/matches/{match_date}", response_model=List[schemas.Match])
+def read_matches_by_date(date: str, db: Session = Depends(get_db)):
+    matches = repository.get_matches_by_date(db, date=date)
+    if not matches:
+        raise HTTPException(status_code=404, detail="No matches found for this date")
+    return matches
+
 
 # Actualitzem un match amb un cert id
 @app.put("/matches/{match_id}")

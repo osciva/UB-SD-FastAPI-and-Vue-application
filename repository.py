@@ -103,6 +103,11 @@ def get_match(db: Session, match_id: int):
 def get_matches(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Match).offset(skip).limit(limit).all()
 
+def get_match_by_id(db: Session, match_id: int):
+    return db.query(models.Match).filter(models.Match.id==match_id).first()
+
+def get_matches_by_date(db: Session, date: str):
+    return db.query(models.Match).filter(models.Match.date == date).all()
 
 def create_match(db: Session, match: MatchCreate):
     db_match = Match(date=match.date, price=match.price, competition_id=match.competition_id, local_id=match.local_id, visitor_id=match.visitor_id)
