@@ -34,7 +34,7 @@ class Competition(Base):
     category = Column(Enum(*categories_list),nullable=False)
     sport = Column(Enum(*sports_list),nullable=False)
     teams = relationship("Team",secondary=teams_in_competitions,backref="competitions")
-    matches = relationship("Match", backref="competition")
+    match = relationship("Match", backref="competitions")
 class Match(Base):
     __tablename__ = 'matches' #This is table name
     __table_args__ = (UniqueConstraint('local_id', 'visitor_id', 'competition_id', 'date'),)

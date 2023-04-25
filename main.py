@@ -40,34 +40,10 @@ def read_team(team_name: str,db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Team not found")
     return team
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
-
-
-@app.get('/python')
-def like_python():
-    return {'I like Python!'}
-
-
-fake_teams_db = []
 
 
 
 
-@app.get("/users/me")
-async def read_user_me():
-    return {"user_id": "the current user"}
-
-
-@app.get("/users/{user_id}")
-async def read_user(user_id: str):
-    return {"user_id": user_id}
 
 
 
@@ -100,13 +76,14 @@ def update_team_by_name(team_name: str, team: schemas.TeamCreate, db: Session = 
     return db_team
 
 
-fake_competitions_db = []
+
 
 
 #llegir les competicions
-@app.get("/competitions/", response_model=schemas.Competition)
+@app.get("/competitions/", response_model=List[schemas.Competition])
 def read_competitions(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     return repository.get_competitions(db, skip=skip, limit=limit)
+
 
 @app.post("/competitions/", response_model=schemas.Competition)
 def create_competition(competition: schemas.CompetitionCreate, db: Session = Depends(get_db)):
@@ -150,7 +127,7 @@ def delete_competition(competition_name: str, db: Session = Depends(get_db)):
 
 
 
-fake_matches_db = []
+
 
 # Llegim els matches
 @app.get("/matches/", response_model=List[schemas.Match])
