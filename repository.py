@@ -115,3 +115,25 @@ def create_match(db: Session, match: MatchCreate):
     db.commit()
     db.refresh(db_match)
     return db_match
+
+def delete_match(db: Session, match_id: int):
+    db_match = get_match(db, match_id)
+    if not db_match:
+        raise HTTPException(status_code=404, detail="Match not found")
+    db.delete(db_match)
+    db.commit()
+    return {"message": f"Match with id {match_id} has been deleted successfully."}
+
+
+def update_match(db: Session, match_id: int, match: MatchCreate):
+    db_match = get_match(db, match_id)
+    if not db_match:
+        raise HTTPException(status_code=404, detail="Match not found")
+    db_match.date = match.date
+    db_match.price = match.price
+    db_match.competition_id = match.competition_id
+    db_match.local_id = match.local_id
+    db_match.visitor_id = match.visitor_id
+    db.commit()
+    db.refresh(db_match)
+    return db_match

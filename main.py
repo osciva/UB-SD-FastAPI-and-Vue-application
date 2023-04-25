@@ -180,21 +180,18 @@ def read_matches_by_date(date: str, db: Session = Depends(get_db)):
 
 
 # Actualitzem un match amb un cert id
-@app.put("/matches/{match_id}")
-async def update_match(match_id: int, match: schemas.Match):
-    for i, m in enumerate(fake_matches_db):
-        if m.id == match_id:
-            fake_matches_db[i] = match
-            return match
-    raise HTTPException(status_code=404, detail="Match not found")
-
-
-#eliminar una competició amb un cert id
-@app.delete("/matches/{match_id}")
-async def delete_match(match_id: int):
-    global fake_matches_db
-    match_index = next((index for (index, c) in enumerate(fake_matches_db) if c.id == match_id), None)
-    if match_index is None:
+@app.delete("/matches/{match_id}", response_model=schemas.Match)
+def delete_match(match_id: int, db: Session = Depends(get_db)):
+    match = repository.get_match(db, match_id=match_id)
+    if not match:
         raise HTTPException(status_code=404, detail="Match not found")
-    del fake_matches_db[match_index]
-    return {"message": f"{match_id} has been deleted successfully."}
+    repository.delete_match(db=db, match_id=match_id)
+    return {"message": f"Match {match_id} has been deleted successfully."}
+
+@app.put("/matches/{match_id}", response_model=schemas.Match)
+def update_match(match_id: int, match: schemas.MatchCreate, db: Session = Depends(get_db)):
+    db_match = repository.get_match(db=db, match_id=match_id)
+    if not db_match:
+        raise HTTPException(status_code=404, detail="Match not found")
+    updated_match = repository.update_match(db=db, match_id=match_id, match=match)
+    return updated_match
