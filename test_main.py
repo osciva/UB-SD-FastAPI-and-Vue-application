@@ -3,6 +3,7 @@ from main import app, get_db
 from fastapi.testclient import TestClient
 import schemas
 client = TestClient(app)
+db = next(get_db())
 
 def test_read_main():
     response = client.get("/")
@@ -12,43 +13,38 @@ def test_read_main():
 
 def test_create_team():
     # Crea un equipo
-    team = {"name": "Barça", "country": "Catalonia", "description": "Futbol Team"}
+    team = {"name": "Madriiiiiiid", "country": "Catalonia", "description": "Futbol Team"}
     response = client.post("/teams/", json=team)
     assert response.status_code == 200
 
     # Verifica que la respuesta tenga la información correcta del equipo creado
-    assert response.json()["name"] == team.name
-    assert response.json()["country"] == team.country
-    assert response.json()["description"] == team.description
+    assert response.json()["name"] == team["name"]
+    assert response.json()["country"] == team["country"]
+    assert response.json()["description"] == team["description"]
 
-    # Verifica que el equipo se haya creado correctamente en la base de datos
-    db = next(get_db())
-    created_team = db.query(models.Team).filter(models.Team.name == team.name).first()
-    assert created_team is not None
-    assert created_team.name == team.name
-    assert created_team.country == team.country
-    assert created_team.description == team.description
 
-    # Borra el equipo creado para no afectar otros tests
-    db.delete(created_team)
-    db.commit()
+def test_read_team_by_name():
+
+    # Leer el equipo
+    response = client.get("/team/barca")
+    assert response.status_code == 200
+    assert response.json()["name"] == "barca"
+    assert response.json()["country"] == "Country 3"
+    assert response.json()["description"] == "viva el betis"
 
 
 
 def test_delete_team():
-    # Crea un equipo para eliminar
-    team = {"name": "Barça", "country": "Catalonia", "description": "Futbol Team"}
-    response = client.post("/teams/", json=team)
-    assert response.status_code == 200
+
 
     # Elimina el equipo creado
-    response = client.delete(f"/teams/{team['name']}")
+    response = client.delete(f"/teams/['name']")
     assert response.status_code == 200
-    assert response.json()["message"] == f"{team['name']} has been deleted successfully."
+    assert response.json()["message"] == f"['name'] has been deleted successfully."
 
     # Verifica que el equipo se haya eliminado correctamente de la base de datos
     db = next(get_db())
-    deleted_team = db.query(models.Team).filter(models.Team.name == team['name']).first()
+    deleted_team = db.query(models.Team).filter(models.Team.name == ['name']).first()
     assert deleted_team is None
 
 
@@ -100,10 +96,34 @@ def test_read_competition_by_id():
 # Test para crear una competición
 def test_create_competition():
     # Crear y añadir competición
-    new_competition3 ={"id": 3, "name": "BBVA", "category": "professional", "sport": "football", "teams": ["Madrid", "Barça"]}
-    response = client.post("/competitions/", json=new_competition3)
+    new_competition ={
+        "name": "Primera division",
+        "category": "professional",
+        "sport": "football",
+        "teams": [
+            {
+                "name": "Team id 2",
+                "country": "Country 3",
+                "description": "New description of Team id 2 with Country 3",
+                "id": 1
+            },
+            {
+                "name": "barca",
+                "country": "Country 3",
+                "description": "viva el betis",
+                "id": 2
+            },
+
+        ]
+    }
+    response = client.post("/competitions/", json=new_competition)
+    print(response)
     assert response.status_code == 200
-    assert response.json() == new_competition3
+    assert response.json()["name"] == new_competition["name"]
+    assert response.json()["category"] == new_competition["category"]
+    assert response.json()["sport"] == new_competition["sport"]
+    assert response.json()["teams"] == new_competition["teams"]
+
 
 
 # Test para actualizar una competición

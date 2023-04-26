@@ -21,6 +21,10 @@ def get_db():
     finally:
         db.close()
 
+
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
 @app.get("/teams/", response_model=List[schemas.Team])
 def read_teams(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     return repository.get_teams(db, skip=skip, limit=limit)
