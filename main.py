@@ -20,7 +20,9 @@ def get_db():
         yield db
     finally:
         db.close()
-
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
 @app.get("/teams/", response_model=List[schemas.Team])
 def read_teams(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     return repository.get_teams(db, skip=skip, limit=limit)
@@ -40,46 +42,17 @@ def read_team(team_name: str,db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Team not found")
     return team
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
-
-
-@app.get('/python')
-def like_python():
-    return {'I like Python!'}
-
-
-fake_teams_db = []
-
-
-
-
-@app.get("/users/me")
-async def read_user_me():
-    return {"user_id": "the current user"}
-
-
-@app.get("/users/{user_id}")
-async def read_user(user_id: str):
-    return {"user_id": user_id}
-
-
-
-
 
 @app.delete("/teams/{team_name}", response_model=schemas.Team)
 def delete_team(team_name: str, team: schemas.Team, db: Session = Depends(get_db)):
-    team = repository.get_team_by_name(db, name=team.name)
+    team = repository.get_team_by_name(db, name=team_name)
+    print(f"Buscando equipo con nombre {team_name}: {team}")
     if not team:
         raise HTTPException(status_code=404, detail="Team not found")
-    repository.delete_team(db=db,team_name=team.name)
+    repository.delete_team(db=db,team_name=team_name)
     return {"message": f"{team_name} has been deleted successfully."}
+
+
 
 @app.put("/teams/{team_id}", response_model=schemas.Team)
 def update_team(team_id: int, team: schemas.TeamCreate, db: Session = Depends(get_db)):
@@ -100,13 +73,14 @@ def update_team_by_name(team_name: str, team: schemas.TeamCreate, db: Session = 
     return db_team
 
 
-fake_competitions_db = []
+
 
 
 #llegir les competicions
-@app.get("/competitions/", response_model=schemas.Competition)
+@app.get("/competitions/", response_model=List[schemas.Competition])
 def read_competitions(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     return repository.get_competitions(db, skip=skip, limit=limit)
+
 
 @app.post("/competitions/", response_model=schemas.Competition)
 def create_competition(competition: schemas.CompetitionCreate, db: Session = Depends(get_db)):
@@ -150,7 +124,7 @@ def delete_competition(competition_name: str, db: Session = Depends(get_db)):
 
 
 
-fake_matches_db = []
+
 
 # Llegim els matches
 @app.get("/matches/", response_model=List[schemas.Match])
@@ -180,21 +154,18 @@ def read_matches_by_date(date: str, db: Session = Depends(get_db)):
 
 
 # Actualitzem un match amb un cert id
-@app.put("/matches/{match_id}")
-async def update_match(match_id: int, match: schemas.Match):
-    for i, m in enumerate(fake_matches_db):
-        if m.id == match_id:
-            fake_matches_db[i] = match
-            return match
-    raise HTTPException(status_code=404, detail="Match not found")
-
-
-#eliminar una competició amb un cert id
-@app.delete("/matches/{match_id}")
-async def delete_match(match_id: int):
-    global fake_matches_db
-    match_index = next((index for (index, c) in enumerate(fake_matches_db) if c.id == match_id), None)
-    if match_index is None:
+@app.delete("/matches/{match_id}", response_model=schemas.Match)
+def delete_match(match_id: int, db: Session = Depends(get_db)):
+    match = repository.get_match(db, match_id=match_id)
+    if not match:
         raise HTTPException(status_code=404, detail="Match not found")
-    del fake_matches_db[match_index]
-    return {"message": f"{match_id} has been deleted successfully."}
+    repository.delete_match(db=db, match_id=match_id)
+    return {"message": f"Match {match_id} has been deleted successfully."}
+
+@app.put("/matches/{match_id}", response_model=schemas.Match)
+def update_match(match_id: int, match: schemas.MatchCreate, db: Session = Depends(get_db)):
+    db_match = repository.get_match(db=db, match_id=match_id)
+    if not db_match:
+        raise HTTPException(status_code=404, detail="Match not found")
+    updated_match = repository.update_match(db=db, match_id=match_id, match=match)
+    return updated_match
