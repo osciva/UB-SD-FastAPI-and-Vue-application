@@ -36,16 +36,16 @@ def test_read_team_by_name():
 
 
 def test_delete_team():
-    team_name = "Madrid"
-    team_to_delete = {
+    team = "barca"
+    delete = {
         "name": "Madrid",
         "country": "Spain"
     }
-    response = client.post("/teams/", json=team_to_delete)
+    response = client.post("/teams/", json=delete)
     assert response.status_code == 200
-    response = client.delete(f"/teams/{team_name}")
+    response = client.delete(f"/teams/{team}")
     assert response.status_code == 200
-    assert response.json()["name"] == team_name
+    assert response.json()["name"] == team
 def test_update_team():
     # Crear un equipo para actualizar
     #client.post("/team", json={"name": "Realff Mddaeedrid", "country": "Spain", "description": "The Kings of Europe"})
