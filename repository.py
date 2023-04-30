@@ -56,11 +56,13 @@ def get_competitions(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Competition).offset(skip).limit(limit).all()
 
 
-def create_competition(db: Session, competition: CompetitionCreate):
+def create_competition(db: Session, competition: Competition):
     db_competition = Competition(name=competition.name, category=competition.category, sport=competition.sport)
     for team_id in competition.teams:
         team = db.query(Team).filter(Team.id == team_id).first()
         db_competition.teams.append(team)
+#   for match_id in competition.matches:
+#       match = db.query(Match).filter(match.id == match_id).first()
     db.add(db_competition)
     db.commit()
     db.refresh(db_competition)

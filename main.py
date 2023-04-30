@@ -46,20 +46,16 @@ def read_team(team_name: str,db: Session = Depends(get_db)):
 
 
 
-
-
-
-
-
-
-
 @app.delete("/teams/{team_name}", response_model=schemas.Team)
 def delete_team(team_name: str, team: schemas.Team, db: Session = Depends(get_db)):
     team = repository.get_team_by_name(db, name=team.name)
     if not team:
         raise HTTPException(status_code=404, detail="Team not found")
-    repository.delete_team(db=db,team_name=team.name)
+    repository.delete_team(db=db,team_name=team_name)
     return {"message": f"{team_name} has been deleted successfully."}
+
+
+
 
 @app.put("/teams/{team_id}", response_model=schemas.Team)
 def update_team(team_id: int, team: schemas.TeamCreate, db: Session = Depends(get_db)):
