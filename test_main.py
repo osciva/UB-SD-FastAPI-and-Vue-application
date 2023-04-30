@@ -38,7 +38,7 @@ def test_read_team_by_name():
 def test_delete_team():
     team = "barca"
     delete = {
-        "name": "Madrid",
+        "name": "barca",
         "country": "Spain"
     }
     response = client.post("/teams/", json=delete)
