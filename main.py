@@ -20,9 +20,15 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+
+
+# ----------------------------------------TEAMS----------------------------------------
 @app.get("/teams/", response_model=List[schemas.Team])
 def read_teams(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     return repository.get_teams(db, skip=skip, limit=limit)
@@ -43,14 +49,15 @@ def read_team(team_name: str,db: Session = Depends(get_db)):
     return team
 
 
+
 @app.delete("/teams/{team_name}", response_model=schemas.Team)
 def delete_team(team_name: str, team: schemas.Team, db: Session = Depends(get_db)):
-    team = repository.get_team_by_name(db, name=team_name)
-    print(f"Buscando equipo con nombre {team_name}: {team}")
+    team = repository.get_team_by_name(db, name=team.name)
     if not team:
         raise HTTPException(status_code=404, detail="Team not found")
     repository.delete_team(db=db,team_name=team_name)
     return {"message": f"{team_name} has been deleted successfully."}
+
 
 
 
@@ -72,9 +79,23 @@ def update_team_by_name(team_name: str, team: schemas.TeamCreate, db: Session = 
         db_team = repository.update_team(db=db, team_name=db_team.name, team=team)
     return db_team
 
+#retorna tots els partits d'un equip, donat el seu nom.
+@app.get("/teams/{team_name}/matches", response_model=schemas.Team)
+def get_matches_team(team_name: str,db: Session = Depends(get_db)):
+    pass
+
+# retorna totes les competicions d'un equip, donat el seu nom.
+@app.get("/teams/{team_name}/competitions", response_model=schemas.Team)
+def get_competitions_team(team_name: str,db: Session = Depends(get_db)):
+    pass
 
 
 
+
+
+
+
+# ----------------------------------------COMPETITIONS----------------------------------------
 
 #llegir les competicions
 @app.get("/competitions/", response_model=List[schemas.Competition])
@@ -124,7 +145,19 @@ def delete_competition(competition_name: str, db: Session = Depends(get_db)):
 
 
 
+# retorna tots els partits d'una competició, donada el seu nom.
+@app.get("/competitions/{competition_name}/matches", response_model=schemas.Competition)
+def get_matches_competition(competition_name: str,db: Session = Depends(get_db)):
+    pass
 
+# retorna tots els equips d'una competició, donada el seu nom.
+@app.get("/competitions/{competition_name}/teams", response_model=schemas.Competition)
+def get_teams_competition(competition_name: str,db: Session = Depends(get_db)):
+    pass
+
+
+
+# ----------------------------------------MATCHES----------------------------------------
 
 # Llegim els matches
 @app.get("/matches/", response_model=List[schemas.Match])
@@ -169,3 +202,15 @@ def update_match(match_id: int, match: schemas.MatchCreate, db: Session = Depend
         raise HTTPException(status_code=404, detail="Match not found")
     updated_match = repository.update_match(db=db, match_id=match_id, match=match)
     return updated_match
+
+
+# retorna l'equip local i visitant d'un partit, donat el seu id.
+@app.get("/matches/{match_id}/teams", response_model=schemas.Match)
+def get_teams_match(match_id: int,db: Session = Depends(get_db)):
+    pass
+
+# retorna la competició d'un partit, donat el seu id.
+@app.get("/matches/{match_id}/competition", response_model=schemas.Match)
+def get_competition_match(match_id: int,db: Session = Depends(get_db)):
+    pass
+

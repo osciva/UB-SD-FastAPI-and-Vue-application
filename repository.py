@@ -4,14 +4,19 @@ import models, schemas
 from models import Competition, Match, Team
 from schemas import CompetitionCreate, MatchCreate, TeamCreate
 
+
+# ----------------------------------------TEAMS----------------------------------------
 def get_team(db: Session, team_id: int):
     return db.query(models.Team).filter(models.Team.id == team_id).first()
+
 
 def get_team_by_name(db: Session, name: str):
     return db.query(models.Team).filter(models.Team.name == name).first()
 
+
 def get_teams(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Team).offset(skip).limit(limit).all()
+
 
 def create_team(db: Session, team: TeamCreate):
     db_team = models.Team(name=team.name, country=team.country, description=team.description)
@@ -19,6 +24,7 @@ def create_team(db: Session, team: TeamCreate):
     db.commit()
     db.refresh(db_team)
     return db_team
+
 
 def delete_team(db: Session, team_name: str):
     team = get_team_by_name(db, team_name)
@@ -41,9 +47,15 @@ def update_team(db: Session, team_name: str, team: TeamCreate):
     return db_team
 
 
+def get_matches_team(db: Session, team_name: str):
+    pass
 
 
+def get_competitions_team(db: Session, team_name: str):
+    pass
 
+
+# ----------------------------------------COMPETITIONS----------------------------------------
 def get_competition(db: Session, competition_id: int):
     return db.query(Competition).filter(Competition.id == competition_id).first()
 
@@ -56,11 +68,13 @@ def get_competitions(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Competition).offset(skip).limit(limit).all()
 
 
-def create_competition(db: Session, competition: CompetitionCreate):
+def create_competition(db: Session, competition: Competition):
     db_competition = Competition(name=competition.name, category=competition.category, sport=competition.sport)
     for team_id in competition.teams:
         team = db.query(Team).filter(Team.id == team_id).first()
         db_competition.teams.append(team)
+    #   for match_id in competition.matches:
+    #       match = db.query(Match).filter(match.id == match_id).first()
     db.add(db_competition)
     db.commit()
     db.refresh(db_competition)
@@ -94,8 +108,14 @@ def delete_competition(db: Session, competition_id: int):
     return {"message": f"Competition with id {competition_id} has been deleted successfully."}
 
 
+def get_matches_competition(db: Session, competition_name: str):
+    pass
 
 
+def get_teams_competition(db: Session, competition_name: str):
+    pass
+
+# ----------------------------------------MATCHES----------------------------------------
 def get_match(db: Session, match_id: int):
     return db.query(Match).filter(Match.id == match_id).first()
 
@@ -103,18 +123,23 @@ def get_match(db: Session, match_id: int):
 def get_matches(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Match).offset(skip).limit(limit).all()
 
+
 def get_match_by_id(db: Session, match_id: int):
-    return db.query(models.Match).filter(models.Match.id==match_id).first()
+    return db.query(models.Match).filter(models.Match.id == match_id).first()
+
 
 def get_matches_by_date(db: Session, date: str):
     return db.query(models.Match).filter(models.Match.date == date).all()
 
+
 def create_match(db: Session, match: MatchCreate):
-    db_match = Match(date=match.date, price=match.price, competition_id=match.competition_id, local_id=match.local_id, visitor_id=match.visitor_id)
+    db_match = Match(date=match.date, price=match.price, competition_id=match.competition_id, local_id=match.local_id,
+                     visitor_id=match.visitor_id)
     db.add(db_match)
     db.commit()
     db.refresh(db_match)
     return db_match
+
 
 def delete_match(db: Session, match_id: int):
     db_match = get_match(db, match_id)
@@ -137,3 +162,10 @@ def update_match(db: Session, match_id: int, match: MatchCreate):
     db.commit()
     db.refresh(db_match)
     return db_match
+
+def get_teams_match(db: Session, match_id: int):
+    pass
+
+
+def get_competition_match(db: Session, match_id: int):
+    pass
