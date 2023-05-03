@@ -48,11 +48,19 @@ def update_team(db: Session, team_name: str, team: TeamCreate):
 
 
 def get_matches_team(db: Session, team_name: str):
-    pass
+    team = get_team_by_name(db, team_name)
+    if not team:
+        return None
+    matches = get_matches(team)
+    return matches
 
 
 def get_competitions_team(db: Session, team_name: str):
-    pass
+    team = get_team_by_name(db, team_name)
+    if not team:
+        return None
+    competitions = get_competitions(team)
+    return competitions
 
 
 # ----------------------------------------COMPETITIONS----------------------------------------
@@ -68,52 +76,71 @@ def get_competitions(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Competition).offset(skip).limit(limit).all()
 
 
-def create_competition(db: Session, competition: Competition):
-    db_competition = Competition(name=competition.name, category=competition.category, sport=competition.sport)
-    for team_id in competition.teams:
-        team = db.query(Team).filter(Team.id == team_id).first()
-        db_competition.teams.append(team)
-    #   for match_id in competition.matches:
-    #       match = db.query(Match).filter(match.id == match_id).first()
-    db.add(db_competition)
-    db.commit()
-    db.refresh(db_competition)
-    return db_competition
+def create_competition(db: Session, competition: schemas.CompetitionCreate):
+    db_competition = models.Competition(name=competition.name, category=competition.category, sport=competition.sport)
+    try:
+        db.add(db_competition)
+        db.commit()
+        db.refresh(db_competition)
+        return db_competition
+    except:
+        db.rollback()
+        return "couldn't create the competition"
 
 
 def update_competition(db: Session, competition_id: int, competition: CompetitionCreate):
     db_competition = get_competition(db, competition_id)
     if not db_competition:
         raise HTTPException(status_code=404, detail="Competition not found")
-    db_competition.name = competition.name
-    db_competition.category = competition.category
-    db_competition.sport = competition.sport
-    db_competition.teams = []
-    for team_id in competition.teams:
-        team = get_team(db, team_id)
-        if not team:
-            raise HTTPException(status_code=404, detail=f"Team with id {team_id} not found")
-        db_competition.teams.append(team)
-    db.commit()
-    db.refresh(db_competition)
-    return db_competition
+    try:
+        db_competition.name = competition.name
+        db_competition.category = competition.category
+        db_competition.sport = competition.sport
+        db_competition.teams = []
+        for team_id in competition.teams:
+            team = get_team(db, team_id)
+            if not team:
+                raise HTTPException(status_code=404, detail=f"Team with id {team_id} not found")
+            db_competition.teams.append(team)
+        #for match_id in competition.matches:
+         #   match = get_match(db, match_id)
+          #  if not match:
+           #     raise HTTPException(status_code=404, detail=f"match with id {match_id} not found")
+            #db_competition.teams.append(match)
+        db.commit()
+        db.refresh(db_competition)
+        return db_competition
+    except:
+        db.rollback()
+        return {"message": "couldn't update the competition"}
 
 
 def delete_competition(db: Session, competition_id: int):
     db_competition = get_competition(db, competition_id)
     if not db_competition:
         raise HTTPException(status_code=404, detail="Competition not found")
-    db.delete(db_competition)
-    db.commit()
-    return {"message": f"Competition with id {competition_id} has been deleted successfully."}
-
+    try:
+        db.delete(db_competition)
+        db.commit()
+        return {"message": f"Competition with id {competition_id} has been deleted successfully."}
+    except:
+        db.rollback()
+        return {"message": "couldn't delete the competition"}
 
 def get_matches_competition(db: Session, competition_name: str):
-    pass
+    db_competition = get_competition_by_name(db, competition_name)
+    if not db_competition:
+        raise HTTPException(status_code=404, detail="Competition not found")
+    matches = get_matches(db_competition)
+    return matches
 
 
 def get_teams_competition(db: Session, competition_name: str):
-    pass
+    db_competition = get_competition_by_name(db, competition_name)
+    if not db_competition:
+        raise HTTPException(status_code=404, detail="Competition not found")
+    teams = get_teams(db_competition)
+    return teams
 
 # ----------------------------------------MATCHES----------------------------------------
 def get_match(db: Session, match_id: int):

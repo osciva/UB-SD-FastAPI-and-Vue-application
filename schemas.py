@@ -37,7 +37,6 @@ class CompetitionCreate(CompetitionBase):
 
 class Competition(CompetitionBase):
     id: int
-    teams: List[Team] = []
    # matches: List[Match] = []
 
     class Config:

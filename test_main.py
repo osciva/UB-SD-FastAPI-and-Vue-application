@@ -18,7 +18,7 @@ def test_read_main():
 # test para crear un equipo
 def test_create_team():
     # Crea un equipo
-    team = {"name": "Maadriiiiiiiddd", "country": "Catalonia", "description": "Futbol Team"}
+    team = {"name": "Maaadriiiiiiiddd", "country": "Catalonia", "description": "Futbol Team"}
     response = client.post("/teams/", json=team)
     assert response.status_code == 200
 
@@ -68,10 +68,10 @@ def test_update_team():
     # response = client.get("/team/Barça")
     # Actualizar el equipo con un nombre y una descripción diferentes
     response = client.put("/team/Barça",
-                          json={"name": "Espanyol_00", "country": "Spain", "description": "Mejor que el Barça"})
+                          json={"name": "Espanyol_000", "country": "Spain", "description": "Mejor que el Barça"})
     # Verificar que el equipo ha sido actualizado correctamente
     assert response.status_code == 200
-    assert response.json()["name"] == "Espanyol_00"
+    assert response.json()["name"] == "Espanyol_000"
     assert response.json()["country"] == "Spain"
     assert response.json()["description"] == "Mejor que el Barça"
 
