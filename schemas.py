@@ -47,9 +47,9 @@ class Competition(CompetitionBase):
 class MatchBase(BaseModel):
     date: datetime
     price: float
-    local: Team
-    visitor: Team
-    competition: Competition
+    local: str
+    visitor: str
+    competition: str
 
 
 class MatchCreate(MatchBase):

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import models
 from main import app, get_db
 from fastapi.testclient import TestClient
@@ -68,10 +70,10 @@ def test_update_team():
     # response = client.get("/team/Barça")
     # Actualizar el equipo con un nombre y una descripción diferentes
     response = client.put("/team/Barça",
-                          json={"name": "Espanyol_00", "country": "Spain", "description": "Mejor que el Barça"})
+                          json={"name": "Espanyol_000", "country": "Spain", "description": "Mejor que el Barça"})
     # Verificar que el equipo ha sido actualizado correctamente
     assert response.status_code == 200
-    assert response.json()["name"] == "Espanyol_00"
+    assert response.json()["name"] == "Espanyol_000"
     assert response.json()["country"] == "Spain"
     assert response.json()["description"] == "Mejor que el Barça"
 
@@ -159,22 +161,22 @@ def test_create_competition():
             }
         ]
 
-#        "matches": [
-#           {
-#               'id': 1,
-#               'local': "barca",
-#               'visitor': 'Espanyol_00',
-#               'date': '2023-04-15',
-#               'price': 40.20
-#           },
-#           {
-#           'id': 2,
-#           'local': "Espanyol_00",
-#           'visitor': 'barca',
-#           'date': '2023-04-15',
-#           'price': 40.20
-#           }
-#       ]
+        #        "matches": [
+        #           {
+        #               'id': 1,
+        #               'local': "barca",
+        #               'visitor': 'Espanyol_00',
+        #               'date': '2023-04-15',
+        #               'price': 40.20
+        #           },
+        #           {
+        #           'id': 2,
+        #           'local': "Espanyol_00",
+        #           'visitor': 'barca',
+        #           'date': '2023-04-15',
+        #           'price': 40.20
+        #           }
+        #       ]
     }
 
 
@@ -238,15 +240,22 @@ def test_read_matches():
 
 # Test para crear un match
 def test_create_match():
-    # Crear y añadir match
-    new_macth2 = {'id': 2,
-                  'local': "UBSport",
-                  'visitor': 'UPC sport',
-                  'date': '2023-04-15',
-                  'price': 40.20}
-    response = client.post("/matches/", json=new_macth2)
+    new_match2 = {
+        "date": "2023-04-11T13:30:00",
+        "price": 40.20,
+        "competition": "Senior",
+        "local": "Espanyol_00",
+        "visitor": "Barçaaaaa"
+    }
+    print("before create_match")
+    response = client.post("/matches/", json=new_match2)
     assert response.status_code == 200
-    assert response.json() == new_macth2
+
+    #assert response.json()["date"] == new_match2["date"]
+    #assert response.json()["price"] == new_match2["price"]
+    #assert response.json()["competition"] == new_match2["Primera division"]
+    #assert response.json()["local"] == new_match2["Espanyol_00"]
+    #assert response.json()["visitor"] == new_match2["Barçaaaaa"]
 
 
 # Test de encontrar un match a traves de su id

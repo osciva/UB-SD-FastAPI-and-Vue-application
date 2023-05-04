@@ -11,7 +11,15 @@ def get_team(db: Session, team_id: int):
 
 
 def get_team_by_name(db: Session, name: str):
-    return db.query(models.Team).filter(models.Team.name == name).first()
+    print("Buscando equipo con nombre: ", name)
+    team = db.query(models.Team).filter(models.Team.name == name).first()
+    if team is None:
+        print("No se encontró ningún equipo con el nombre: ", name)
+    else:
+        print("Se encontró el equipo: ", team.name)
+    return team
+
+
 
 
 def get_teams(db: Session, skip: int = 0, limit: int = 100):
@@ -61,7 +69,7 @@ def get_competition(db: Session, competition_id: int):
 
 
 def get_competition_by_name(db: Session, name: str):
-    return db.query(Competition).filter(Competition.name == name).first()
+    return db.query(Competition).filter(models.Competition.name == name).first()
 
 
 def get_competitions(db: Session, skip: int = 0, limit: int = 100):
@@ -120,6 +128,7 @@ def get_match(db: Session, match_id: int):
     return db.query(Match).filter(Match.id == match_id).first()
 
 
+
 def get_matches(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Match).offset(skip).limit(limit).all()
 
@@ -133,8 +142,23 @@ def get_matches_by_date(db: Session, date: str):
 
 
 def create_match(db: Session, match: MatchCreate):
-    db_match = Match(date=match.date, price=match.price, competition_id=match.competition_id, local_id=match.local_id,
-                     visitor_id=match.visitor_id)
+    print("Dentro de create_match")
+    local_team = get_team_by_name(db, match.local)
+    visitor_team = get_team_by_name(db, match.visitor)
+    competition = get_competition_by_name(db, match.competition)
+    print("despues de buscar competicion", competition.name, competition)
+    if competition is None:
+        # Si la competición no existe, la creamos
+        print("Creamos competicion")
+        db_competition = Competition(name=match.competition, category="Senior", sport="Football")
+        print("la competicion se hac reado bien", db_competition)
+        db.add(db_competition)
+        db.commit()
+        db.refresh(db_competition)
+    print("Definimos el match en la db")
+    db_match = Match(date=match.date, price=match.price, competition=competition, local=local_team,
+                     visitor=visitor_team)
+    print("db_match creado", db_match.local)
     db.add(db_match)
     db.commit()
     db.refresh(db_match)

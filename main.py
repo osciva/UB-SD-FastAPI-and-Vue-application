@@ -164,11 +164,13 @@ def get_teams_competition(competition_name: str,db: Session = Depends(get_db)):
 def read_matches(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     return repository.get_matches(db, skip=skip, limit=limit)
 
-
 @app.post("/matches/", response_model=schemas.Match)
 def create_match(match: schemas.MatchCreate, db: Session = Depends(get_db)):
     # En principio se pueden repetir nomrbes, deberiamos controlar, que no haya un mismo equipo jugando el mismo date
+    print("antes de llamarlo")
     db_match = repository.create_match(db=db, match=match)
+    print("despues de llamarlo")
+
     return db_match
 
 @app.get("/matches/{match_id}", response_model=schemas.Match)

@@ -37,13 +37,15 @@ class Competition(Base):
     match = relationship("Match", backref="competitions")
 class Match(Base):
     __tablename__ = 'matches' #This is table name
-    __table_args__ = (UniqueConstraint('local_id', 'visitor_id', 'competition_id', 'date'),)
+    __table_args__ = (UniqueConstraint('local_id', 'visitor_id', 'competition_id', 'date'),) #'local_id', 'visitor_id' #Esto indica que no puede repetirse
 
     id = Column(Integer, primary_key=True)
     date = Column(DateTime, nullable=False)
     price = Column(Float, nullable=False)
+    #local = Column(String(30), nullable=False)
+    #visitor = Column(String(30), nullable=False)
     competition_id = Column(Integer, ForeignKey("competitions.id"), nullable=False)
-    competition = relationship("Competition",backref="matches")
+    competition = relationship("Competition", backref="matches")
 
     local_id = Column(Integer, ForeignKey("teams.id"), nullable=False)
     visitor_id = Column(Integer, ForeignKey("teams.id"), nullable=False)
