@@ -14,7 +14,7 @@ def get_team_by_name(db: Session, name: str):
     return db.query(models.Team).filter(models.Team.name == name).first()
 
 
-def get_teams(db: Session, skip: int = 0, limit: int = 100):
+def get_teams(db: Session, skip: int = 0, limit: int = 1000):
     return db.query(models.Team).offset(skip).limit(limit).all()
 
 
@@ -65,11 +65,11 @@ def get_competitions_team(db: Session, team_name: str):
 
 # ----------------------------------------COMPETITIONS----------------------------------------
 def get_competition(db: Session, competition_id: int):
-    return db.query(Competition).filter(Competition.id == competition_id).first()
+    return db.query(Competition).filter(models.Competition.id == competition_id).first()
 
 
 def get_competition_by_name(db: Session, name: str):
-    return db.query(Competition).filter(Competition.name == name).first()
+    return db.query(Competition).filter(models.Competition.name == name).first()
 
 
 def get_competitions(db: Session, skip: int = 0, limit: int = 100):
@@ -78,6 +78,14 @@ def get_competitions(db: Session, skip: int = 0, limit: int = 100):
 
 def create_competition(db: Session, competition: schemas.CompetitionCreate):
     db_competition = models.Competition(name=competition.name, category=competition.category, sport=competition.sport)
+
+    #crear teams per a la competició
+    for t in competition.teams:
+        team_dict = t.dict()
+        team_id = team_dict['id']
+        team = db.query(models.Team).filter(models.Team.id == team_id).one()
+        db_competition.teams.append(team)
+
     try:
         db.add(db_competition)
         db.commit()
@@ -88,7 +96,7 @@ def create_competition(db: Session, competition: schemas.CompetitionCreate):
         return "couldn't create the competition"
 
 
-def update_competition(db: Session, competition_id: int, competition: CompetitionCreate):
+def update_competition(db: Session, competition_id: int, competition: Competition):
     db_competition = get_competition(db, competition_id)
     if not db_competition:
         raise HTTPException(status_code=404, detail="Competition not found")

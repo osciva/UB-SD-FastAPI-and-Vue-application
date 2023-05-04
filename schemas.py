@@ -31,12 +31,14 @@ class CompetitionBase(BaseModel):
     sport: enum.Enum(*sports_list)
 
 
+
 class CompetitionCreate(CompetitionBase):
     pass
 
 
 class Competition(CompetitionBase):
     id: int
+    teams: List[Team] = []
    # matches: List[Match] = []
 
     class Config:

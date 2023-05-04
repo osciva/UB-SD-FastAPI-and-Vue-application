@@ -2,6 +2,7 @@ import models
 from main import app, get_db
 from fastapi.testclient import TestClient
 import schemas
+from schemas import *
 
 client = TestClient(app)
 db = next(get_db())
@@ -18,7 +19,7 @@ def test_read_main():
 # test para crear un equipo
 def test_create_team():
     # Crea un equipo
-    team = {"name": "Maaadriiiiiiiddd", "country": "Catalonia", "description": "Futbol Team"}
+    team = {"name": "Maaadriiiiiiidddeeloooo", "country": "Catalonia", "description": "Futbol Team"}
     response = client.post("/teams/", json=team)
     assert response.status_code == 200
 
@@ -26,6 +27,7 @@ def test_create_team():
     assert response.json()["name"] == team["name"]
     assert response.json()["country"] == team["country"]
     assert response.json()["description"] == team["description"]
+    assert response.json()["id"]
 
 
 # test para leer todos los equipos
@@ -117,47 +119,36 @@ def test_read_competition_by_id():
 # Test para crear una competición
 def test_create_competition():
     # Crear y añadir competición
+    team_info = {
+        "name": "barcaaaaaaaaaaaaaaaleeeeeeee",
+        "country": "Country 3",
+        "description": "viva el betis"
+    }
+    response = client.post("/teams/", json=team_info)
+    print(response)
+    team_id = response.json()["id"]
+
+    teams_to_add = Team(name="barcaaaaaaaaaaaaaaaleeeeeeee", country="Country 3", description="viva el betis", id=team_id)
     new_competition = {
         "name": "Primera division",
         "category": "professional",
         "sport": "football",
-        "teams": [
-            {
-                "name": "barca",
-                "country": "Country 3",
-                "description": "viva el betis",
-                "id": 2
-            },
-            {
-                "name": "Espanyol_00",
-                "country": "Spain",
-                "description": "Mejor que el Barça",
-                "id": 3
-            },
-        ]
+        "teams": [teams_to_add.dict()]
     }
     response = client.post("/competitions/", json=new_competition)
-    print(new_competition)
+
     assert response.status_code == 200
-    assert response.json() == {
+    assert response.json()["name"] == "Primera division"
+    assert response.json()["category"] == "professional"
+    assert response.json()["sport"] == "football"
+    assert response.json()["teams"][0]["name"] == "barcaaaaaaaaaaaaaaaleeeeeeee"
+
+'''    assert response.json() == {
         "name": "Primera division",
         "category": "professional",
         "sport": "football",
-        "id": 1,
-        "teams": [
-            {
-                "name": "barca",
-                "country": "Country 3",
-                "description": "viva el betis",
-                "id": 2
-            },
-            {
-                "name": "Espanyol_00",
-                "country": "Spain",
-                "description": "Mejor que el Barça",
-                "id": 3
-            }
-        ]
+
+
 
 #        "matches": [
 #           {
@@ -176,7 +167,7 @@ def test_create_competition():
 #           }
 #       ]
     }
-
+'''
 
 # Test para actualizar una competición
 def test_update_competition():
