@@ -1,5 +1,5 @@
 import enum
-from models import sports_list, categories_list
+from models import sports_list, categories_list, Category, Sports
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
@@ -27,8 +27,8 @@ class Team(TeamBase):
 
 class CompetitionBase(BaseModel):
     name: str
-    category: enum.Enum(*categories_list)
-    sport: enum.Enum(*sports_list)
+    category: Category
+    sport: Sports
 
 
 

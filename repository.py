@@ -79,12 +79,12 @@ def get_competitions(db: Session, skip: int = 0, limit: int = 100):
 def create_competition(db: Session, competition: schemas.CompetitionCreate):
     db_competition = models.Competition(name=competition.name, category=competition.category, sport=competition.sport)
 
-    #crear teams per a la competició
-    for t in competition.teams:
-        team_dict = t.dict()
-        team_id = team_dict['id']
-        team = db.query(models.Team).filter(models.Team.id == team_id).one()
-        db_competition.teams.append(team)
+    # #crear teams per a la competició
+    # for t in competition.teams:
+    #     team_dict = t.dict()
+    #     team_id = team_dict['id']
+    #     team = db.query(models.Team).filter(models.Team.id == team_id).one()
+    #     db_competition.teams.append(team)
 
     try:
         db.add(db_competition)
@@ -104,12 +104,7 @@ def update_competition(db: Session, competition_id: int, competition: Competitio
         db_competition.name = competition.name
         db_competition.category = competition.category
         db_competition.sport = competition.sport
-        db_competition.teams = []
-        for team_id in competition.teams:
-            team = get_team(db, team_id)
-            if not team:
-                raise HTTPException(status_code=404, detail=f"Team with id {team_id} not found")
-            db_competition.teams.append(team)
+        db_competition.teams = competition.teams
         #for match_id in competition.matches:
          #   match = get_match(db, match_id)
           #  if not match:
