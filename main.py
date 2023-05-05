@@ -41,7 +41,7 @@ def create_team(team: schemas.TeamCreate,db: Session = Depends(get_db)):
     else:
         return repository.create_team(db=db, team=team)
 
-@app.get("/team/{team_name}", response_model=schemas.Team)
+@app.get("/teams/{team_name}", response_model=schemas.Team)
 def read_team(team_name: str,db: Session = Depends(get_db)):
     team = repository.get_team_by_name(db, name=team_name)
     if not team:
@@ -50,9 +50,9 @@ def read_team(team_name: str,db: Session = Depends(get_db)):
 
 
 
-@app.delete("/teams/{team_name}", response_model=schemas.Team)
-def delete_team(team_name: str, team: schemas.Team, db: Session = Depends(get_db)):
-    team = repository.get_team_by_name(db, name=team.name)
+@app.delete("/teams/{team_name}", response_model=dict)
+def delete_team(team_name: str, db: Session = Depends(get_db)):
+    team = repository.get_team_by_name(db, name=team_name)
     if not team:
         raise HTTPException(status_code=404, detail="Team not found")
     repository.delete_team(db=db,team_name=team_name)
@@ -82,12 +82,20 @@ def update_team_by_name(team_name: str, team: schemas.TeamCreate, db: Session = 
 #retorna tots els partits d'un equip, donat el seu nom.
 @app.get("/teams/{team_name}/matches", response_model=schemas.Team)
 def get_matches_team(team_name: str,db: Session = Depends(get_db)):
-    pass
+    team = repository.get_team_by_name(db, name=team_name)
+    if not team:
+        raise HTTPException(status_code=404, detail="Team not found")
+    matches = repository.get_matches_team(db, team_name)
+    return matches
 
 # retorna totes les competicions d'un equip, donat el seu nom.
 @app.get("/teams/{team_name}/competitions", response_model=schemas.Team)
 def get_competitions_team(team_name: str,db: Session = Depends(get_db)):
-    pass
+    team = repository.get_team_by_name(db, name=team_name)
+    if not team:
+        raise HTTPException(status_code=404, detail="Team not found")
+    competitions = repository.get_competitions_team(db, team_name)
+    return competitions
 
 
 
@@ -126,7 +134,7 @@ def read_competition(competition_id: int, db: Session = Depends(get_db)):
 
 #actualitzar una competició amb un cert id
 @app.put("/competitions/{competition_name}", response_model=schemas.Competition)
-def update_competition(competition_name: str, competition: schemas.CompetitionCreate, db: Session = Depends(get_db)):
+def update_competition(competition_name: str, competition: schemas.Competition, db: Session = Depends(get_db)):
     db_competition = repository.get_competition_by_name(db=db, name=competition_name)
     if not db_competition:
         raise HTTPException(status_code=404, detail="Competition not found")
@@ -135,7 +143,7 @@ def update_competition(competition_name: str, competition: schemas.CompetitionCr
 
 
 #eliminar una competició amb un cert id
-@app.delete("/competitions/{competition_name}", response_model=schemas.Competition)
+@app.delete("/competitions/{competition_name}", response_model=dict)
 def delete_competition(competition_name: str, db: Session = Depends(get_db)):
     competition = repository.get_competition_by_name(db, name=competition_name)
     if not competition:
@@ -148,12 +156,20 @@ def delete_competition(competition_name: str, db: Session = Depends(get_db)):
 # retorna tots els partits d'una competició, donada el seu nom.
 @app.get("/competitions/{competition_name}/matches", response_model=schemas.Competition)
 def get_matches_competition(competition_name: str,db: Session = Depends(get_db)):
-    pass
+    competition = repository.get_competition_by_name(db, name=competition_name)
+    if not competition:
+        raise HTTPException(status_code=404, detail="Competition not found")
+    matches = repository.get_matches_competition(db=db, competition_name=competition.name)
+    return matches
 
 # retorna tots els equips d'una competició, donada el seu nom.
 @app.get("/competitions/{competition_name}/teams", response_model=schemas.Competition)
 def get_teams_competition(competition_name: str,db: Session = Depends(get_db)):
-    pass
+    competition = repository.get_competition_by_name(db, name=competition_name)
+    if not competition:
+        raise HTTPException(status_code=404, detail="Competition not found")
+    teams = repository.get_teams_competition(db=db, competition_name=competition.name)
+    return teams
 
 
 
