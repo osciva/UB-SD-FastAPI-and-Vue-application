@@ -7,10 +7,12 @@ from schemas import CompetitionCreate, MatchCreate, TeamCreate
 
 # ----------------------------------------TEAMS----------------------------------------
 def get_team(db: Session, team_id: int):
+    print("get_team", team_id)
     return db.query(models.Team).filter(models.Team.id == team_id).first()
 
 
 def get_team_by_name(db: Session, name: str):
+    print("get_team", name)
     return db.query(models.Team).filter(models.Team.name == name).first()
 
 
@@ -65,10 +67,12 @@ def get_competitions_team(db: Session, team_name: str):
 
 # ----------------------------------------COMPETITIONS----------------------------------------
 def get_competition(db: Session, competition_id: int):
+    print("get_competition", competition_id)
     return db.query(Competition).filter(models.Competition.id == competition_id).first()
 
 
 def get_competition_by_name(db: Session, name: str):
+    print("get_competition", name)
     return db.query(Competition).filter(models.Competition.name == name).first()
 
 
@@ -170,11 +174,13 @@ def get_matches_by_date(db: Session, date: str):
     db.refresh(db_match)
     return db_match"""
 def create_match(db: Session, match: MatchCreate):
-    print("Dentro de create_match")
+    print("Dentro de create_match", match.local)
     local_team = get_team_by_name(db, match.local)
+    print("Local creado")
     visitor_team = get_team_by_name(db, match.visitor)
     competition = get_competition_by_name(db, match.competition)
-    print("despues de buscar competicion", competition.name, competition)
+    print("despues de buscar competicion")
+    print(competition.name, local_team.name, visitor_team.name, competition)
     """if competition is None:
         # Si la competición no existe, la creamos
         print("Creamos competicion")

@@ -10,7 +10,7 @@ class Team(Base):
     __tablename__ = 'teams' #This is table name
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(30),unique=True, nullable=False, index=True)
+    name: str = Column(String(30),unique=True, nullable=False, index=True)
     country = Column(String(30),nullable=False)
     description = Column(String(100))
 
@@ -58,12 +58,12 @@ class Match(Base):
     #local = Column(String(30), nullable=False)
     #visitor = Column(String(30), nullable=False)
     competition_id = Column(Integer, ForeignKey("competitions.id"), nullable=False)
-    competition = relationship("Competition", backref="matches")
+    competition = relationship(str, backref="matches")
 
     local_id = Column(Integer, ForeignKey("teams.id"), nullable=False)
     visitor_id = Column(Integer, ForeignKey("teams.id"), nullable=False)
-    local = relationship("Team", foreign_keys=local_id)
-    visitor = relationship("Team", foreign_keys=visitor_id)
+    local = relationship(str, foreign_keys=local_id)
+    visitor = relationship(str, foreign_keys=visitor_id)
 
 
 class Parent(Base):

@@ -211,7 +211,7 @@ def test_create_match():
     new_match2 = {
         "date": "2023-04-11T13:30:00",
         "price": 40.20,
-        "competition": "Senior",
+        "competition": "Primeradivision",
         "local": "Espanyol_00",
         "visitor": "Barçaaaaa"
     }
