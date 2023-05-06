@@ -1,3 +1,5 @@
+import enum
+
 from sqlalchemy import Boolean, MetaData, Column, ForeignKey, Integer, String, Date, DateTime, Float, Enum, UniqueConstraint, Table
 from sqlalchemy.orm import relationship
 
@@ -20,9 +22,19 @@ teams_in_competitions = Table("teams_in_competitions",Base.metadata,
 
 
 
-categories_list = ("Senior","Junior")
-sports_list = ("Volleyball","Football")
+class Category(str, enum.Enum):
+    Senior = "Senior"
+    Junior = "Junior"
 
+class Sports(str, enum.Enum):
+    Volleyball = "Volleyball"
+    Football = "Football"
+    Futsal = "Futsal"
+
+# categories_list = ("Senior","Junior")
+# sports_list = ("Volleyball","Football")
+categories_list = (Category)
+sports_list = (Sports)
 
 class Competition(Base):
 

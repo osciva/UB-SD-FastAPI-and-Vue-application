@@ -4,6 +4,7 @@ import models
 from main import app, get_db
 from fastapi.testclient import TestClient
 import schemas
+from schemas import *
 
 client = TestClient(app)
 db = next(get_db())
@@ -20,7 +21,7 @@ def test_read_main():
 # test para crear un equipo
 def test_create_team():
     # Crea un equipo
-    team = {"name": "Maadriiiiiiiddd", "country": "Catalonia", "description": "Futbol Team"}
+    team = {"name": "Madrid", "country": "Spain", "description": "Futbol Team"}
     response = client.post("/teams/", json=team)
     assert response.status_code == 200
 
@@ -28,6 +29,7 @@ def test_create_team():
     assert response.json()["name"] == team["name"]
     assert response.json()["country"] == team["country"]
     assert response.json()["description"] == team["description"]
+    assert response.json()["id"]
 
 
 # test para leer todos los equipos
@@ -40,25 +42,33 @@ def test_read_teams():
 
 # test para obtener un equipo dado su nombre
 def test_read_team_by_name():
-    teamname = "barca"
+    teamname = "Madrid"
     # Leer el equipo
     response = client.get(f"/team/{teamname}")
     assert response.status_code == 200
-    assert response.json()["name"] == "barca"
-    assert response.json()["country"] == "Country 3"
-    assert response.json()["description"] == "viva el betis"
+    assert response.json()["name"] == "Madrid"
+    assert response.json()["country"] == "Spain"
+    assert response.json()["description"] == "Futbol Team"
 
 
 # test para eliminar un equipo
 def test_delete_team():
-    team = "barca"
-    delete = {
-        "name": "barca",
-        "country": "Spain"
+    team = "Madrid"
+    teams = {
+        "name": "Madrid",
+        "country": "Spain",
+        "description": None
     }
-    response = client.post("/teams/", json=delete)
+    response = client.post("/teams/", json=teams)
     assert response.status_code == 200
-    response = client.delete(f"/teams/{team}")
+    team_id = response.json()["id"]
+    team_to_delete = {
+        "name": "Madrid",
+        "country": "Spain",
+        "description": None,
+        "id": team_id
+    }
+    response = client.delete(f"/teams/{team}", json=team_to_delete)
     assert response.status_code == 200
     assert response.json()["name"] == team
 
@@ -66,19 +76,63 @@ def test_delete_team():
 # test para actualizar un equipo
 def test_update_team():
     # Crear un equipo para actualizar
-    # client.post("/team", json={"name": "Realff Mddaeedrid", "country": "Spain", "description": "The Kings of Europe"})
-    # response = client.get("/team/Barça")
+    team = {"name": "madrid", "country": "Spain", "description": "HALA MADRIIID"}
+    response = client.post("/teams/", json=team)
+    assert response.status_code == 200
+
+    # Verifica que la respuesta tenga la información correcta del equipo creado
+    assert response.json()["name"] == team["name"]
+    assert response.json()["country"] == team["country"]
+    assert response.json()["description"] == team["description"]
+    assert response.json()["id"]
+
+
     # Actualizar el equipo con un nombre y una descripción diferentes
+
     response = client.put("/team/Barça",
                           json={"name": "Espanyol_000", "country": "Spain", "description": "Mejor que el Barça"})
     # Verificar que el equipo ha sido actualizado correctamente
     assert response.status_code == 200
     assert response.json()["name"] == "Espanyol_000"
+    response = client.put("/team/Madrid",
+                          json={"name": "Barça", "country": "Spain", "description": "Mejor que el Madrid"})
+    # Verificar que el equipo ha sido actualizado correctamente
+    assert response.status_code == 200
+    assert response.json()["name"] == "Barça"
+
     assert response.json()["country"] == "Spain"
-    assert response.json()["description"] == "Mejor que el Barça"
+    assert response.json()["description"] == "Mejor que el Madrid"
 
 
 # ----------------------------------------TESTS-DE-COMPETITIONS---------------------------------------
+
+
+# Test para crear una competición
+def test_create_competition():
+    # Crear y añadir competición
+    team_info = {
+        "name": "barça3",
+        "country": "catalonia",
+        "description": "més que un club"
+    }
+    response = client.post("/teams/", json=team_info)
+    print(response)
+    team_id = response.json()["id"]
+
+    teams_to_add = Team(name="barça3", country="catalonia", description="més que un club", id=team_id)
+    new_competition = {
+        "name": "Primera division",
+        "category": "professional",
+        "sport": "football",
+        "teams": [teams_to_add.dict()]
+    }
+    response = client.post("/competitions/", json=new_competition)
+
+    assert response.status_code == 200
+    assert response.json()["name"] == "Primera division"
+    assert response.json()["category"] == "professional"
+    assert response.json()["sport"] == "football"
+    assert response.json()["teams"][0]["name"] == "barça3"
 
 # test para leer todas las competitions
 def test_read_competitions():
@@ -92,27 +146,12 @@ def test_read_competitions():
 def test_read_competition_by_id():
     id = 1
     # Leer el equipo
-    response = client.get(f"/team/{id}")
+    response = client.get(f"/competitions/{id}")
     assert response.status_code == 200
     assert response.json() == {
         "name": "Primera division",
         "category": "professional",
-        "sport": "football",
-        "id": 1,
-        "teams": [
-            {
-                "name": "barca",
-                "country": "Country 3",
-                "description": "viva el betis",
-                "id": 2
-            },
-            {
-                "name": "Espanyol_00",
-                "country": "Spain",
-                "description": "Mejor que el Barça",
-                "id": 3
-            },
-        ]
+        "sport": "football"
     }
 
 
