@@ -147,14 +147,14 @@ def create_match(db: Session, match: MatchCreate):
     visitor_team = get_team_by_name(db, match.visitor)
     competition = get_competition_by_name(db, match.competition)
     print("despues de buscar competicion", competition.name, competition)
-    if competition is None:
+    """if competition is None:
         # Si la competición no existe, la creamos
         print("Creamos competicion")
         db_competition = Competition(name=match.competition, category="Senior", sport="Football")
         print("la competicion se hac reado bien", db_competition)
         db.add(db_competition)
         db.commit()
-        db.refresh(db_competition)
+        db.refresh(db_competition)"""
     print("Definimos el match en la db")
     db_match = Match(date=match.date, price=match.price, competition=competition, local=local_team,
                      visitor=visitor_team)
