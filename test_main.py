@@ -266,8 +266,8 @@ def test_create_match():
 
     # Creamos un nuevo partido
     new_match = {
-        "date": "2025-05-11T13:30:00",
-        "price": 40.20,
+        "date": "2027-05-11T13:30:00",
+        "price": 1.20,
         "competition": new_competition,
         "local": local_team,
         "visitor": visitor_team
@@ -281,8 +281,8 @@ def test_create_match():
     assert response.status_code == 200
 
     match = response.json()
-    assert match["date"] == "2025-05-11T13:30:00"
-    assert match["price"] == 40.20
+    assert match["date"] == "2027-05-11T13:30:00"
+    assert match["price"] == 1.20
     assert match["competition"]["name"] == "Primera division"
     assert match["local"]["name"] == "barça3"
     assert match["visitor"]["name"] == "espanyol"
