@@ -69,14 +69,13 @@ def get_competitions_team(db: Session, team_name: str):
 # ----------------------------------------COMPETITIONS----------------------------------------
 def get_competition(db: Session, competition_id: int):
     print("get_competition", competition_id)
-    return db.query(Competition).filter(models.Competition.id == competition_id).first()
+    return db.query(Competition).filter(Competition.id == competition_id).first()
 
 
 def get_competition_by_name(db: Session, name: str):
     print("Dintre de competition by name")
     return db.query(Competition).filter(Competition.name == name).first()
-    print("get_competition", name)
-    return db.query(Competition).filter(models.Competition.name == name).first()
+
 
 
 
