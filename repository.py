@@ -1,4 +1,5 @@
 from fastapi import HTTPException
+from numpy import select
 from sqlalchemy.orm import Session
 import models, schemas
 from models import Competition, Match, Team
@@ -11,6 +12,7 @@ def get_team(db: Session, team_id: int):
 
 
 def get_team_by_name(db: Session, name: str):
+    print("Dintre de team by name")
     return db.query(models.Team).filter(models.Team.name == name).first()
 
 
@@ -69,7 +71,8 @@ def get_competition(db: Session, competition_id: int):
 
 
 def get_competition_by_name(db: Session, name: str):
-    return db.query(Competition).filter(models.Competition.name == name).first()
+    print("Dintre de competition by name")
+    return db.query(Competition).filter(Competition.name == name).first()
 
 
 def get_competitions(db: Session, skip: int = 0, limit: int = 100):
@@ -169,28 +172,64 @@ def get_matches_by_date(db: Session, date: str):
     db.commit()
     db.refresh(db_match)
     return db_match"""
-def create_match(db: Session, match: MatchCreate):
+"""def create_match(db: Session, match: MatchCreate):
     print("Dentro de create_match")
     local_team = get_team_by_name(db, match.local)
     visitor_team = get_team_by_name(db, match.visitor)
     competition = get_competition_by_name(db, match.competition)
     print("despues de buscar competicion", competition.name, competition)
-    """if competition is None:
+
+    #stmt = select(models.Competition).where(models.Competition.id ==match.competition.id)
+    #if competition is None:
         # Si la competición no existe, la creamos
-        print("Creamos competicion")
-        db_competition = Competition(name=match.competition, category="Senior", sport="Football")
-        print("la competicion se hac reado bien", db_competition)
-        db.add(db_competition)
-        db.commit()
-        db.refresh(db_competition)"""
+        #print("Creamos competicion")
+        #db_competition = Competition(name=match.competition, category="Senior", sport="Football")
+        #print("la competicion se hac reado bien", db_competition)
+        #db.add(db_competition)
+        #db.commit()
+        #db.refresh(db_competition)
     print("Definimos el match en la db")
-    db_match = Match(date=match.date, price=match.price, competition=competition, local=local_team,
+    #db_match = Match(date=match.date, price=match.price, competition=competition, local=local_team,
                      visitor=visitor_team)
     print("db_match creado", db_match.local)
     db.add(db_match)
     db.commit()
     db.refresh(db_match)
+    return db_match"""
+
+def create_match(db: Session, match: MatchCreate):
+    local_team = get_team_by_name(db, match.local.name)
+    if local_team is None:
+        raise HTTPException(status_code=422, detail="Local team not found")
+    visitor_team = get_team_by_name(db, match.visitor.name)
+    if visitor_team is None:
+        raise HTTPException(status_code=422, detail="Visitor team not found")
+    competition = get_competition_by_name(db, match.competition.name)
+
+    if competition is None:
+        # Si la competición no existe, la creamos
+        db_competition = models.Competition(
+            name=match.competition.name,
+            category=match.competition.category,
+            sport=match.competition.sport
+        )
+        db.add(db_competition)
+        db.commit()
+        db.refresh(db_competition)
+        competition = db_competition
+
+    db_match = models.Match(
+        date=match.date,
+        price=match.price,
+        competition=competition,
+        local=local_team,
+        visitor=visitor_team
+    )
+    db.add(db_match)
+    db.commit()
+    db.refresh(db_match)
     return db_match
+
 
 
 

@@ -48,9 +48,12 @@ class Competition(CompetitionBase):
 class MatchBase(BaseModel):
     date: datetime
     price: float
+    """local: str
+    visitor: str
+    competition: str"""
     local: Team
     visitor: Team
-    competition: Competition
+    competition: Competition #Asi funciona con postman y como deberia ser
 
 
 class MatchCreate(MatchBase):
@@ -62,3 +65,4 @@ class Match(MatchBase):
 
     class Config:
         orm_mode = True
+

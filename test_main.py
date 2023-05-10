@@ -206,24 +206,87 @@ def test_read_matches():
     assert isinstance(response.json(), list)
 
 
-# Test para crear un match
+"""# Test para crear un match
 def test_create_match():
+    teams_to_add = Team(name="barça3", country="catalonia", description="més que un club", id=1)
+    new_competition = {
+        "name": "Primera division",
+        "category": "professional",
+        "sport": "football",
+        "teams": [teams_to_add.dict()]
+    }
+    local_team = Team(name="barça3", country="catalonia", description="més que un club", id=1).dict()
+    visitor_team = Team(name="espanyol", country="catalonia", description="més que un club", id=2).dict()
+
     new_match2 = {
         "date": "2023-04-11T13:30:00",
         "price": 40.20,
-        "competition": "Senior",
-        "local": "Espanyol_00",
-        "visitor": "Barçaaaaa"
+        "competition": new_competition,
+        "local": local_team,
+        "visitor": visitor_team
+
+        #"competition": "Primeradivision",
+        #"local": "barça3",
+        #"visitor": "espanyol
     }
     print("before create_match")
-    response = client.post("/matches/", json=new_match2)
+    response = client.post("/matches", json=new_match2)
+    print("reeeeeesponse", response)
     assert response.status_code == 200
 
     #assert response.json()["date"] == new_match2["date"]
     #assert response.json()["price"] == new_match2["price"]
     #assert response.json()["competition"] == new_match2["Primera division"]
     #assert response.json()["local"] == new_match2["Espanyol_00"]
-    #assert response.json()["visitor"] == new_match2["Barçaaaaa"]
+    #assert response.json()["visitor"] == new_match2["Barçaaaaa"]"""
+
+def test_create_match():
+    # Creamos dos equipos
+    local_team = {
+        "name": "barça3",
+        "country": "catalonia",
+        "description": "més que un club",
+        "id": 1
+    }
+    visitor_team = {
+        "name": "espanyol",
+        "country": "catalonia",
+        "description": "som la gent blanqu-i-blava",
+        "id": 2
+    }
+
+    # Creamos una nueva competición
+    new_competition = {
+        "name": "Primera division",
+        "category": "Senior",
+        "sport": "Football",
+        "teams": [local_team, visitor_team],
+        "id": 1
+    }
+
+    # Creamos un nuevo partido
+    new_match = {
+        "date": "2025-05-11T13:30:00",
+        "price": 40.20,
+        "competition": new_competition,
+        "local": local_team,
+        "visitor": visitor_team
+    }
+
+    # Enviamos la petición HTTP al servidor
+    response = client.post("/matches/", json=new_match)
+    print(response.json())
+
+    # Comprobamos que se ha creado el partido correctamente
+    assert response.status_code == 200
+
+    match = response.json()
+    assert match["date"] == "2025-05-11T13:30:00"
+    assert match["price"] == 40.20
+    assert match["competition"]["name"] == "Primera division"
+    assert match["local"]["name"] == "barça3"
+    assert match["visitor"]["name"] == "espanyol"
+
 
 
 # Test de encontrar un match a traves de su id
