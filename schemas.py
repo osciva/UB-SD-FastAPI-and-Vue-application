@@ -56,6 +56,7 @@ class MatchBase(BaseModel):
     competition: Competition #Asi funciona con postman y como deberia ser
 
 
+
 class MatchCreate(MatchBase):
     pass
 
