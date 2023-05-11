@@ -13,7 +13,7 @@
         <div class="col-lg-4 col-md-6 mb-4" v-for="(match) in matches" :key="match.id">
           <br>
           <div class="card" style="width: 18rem;">
-            <img class="card-img-top" :src="getMatchImage(match.competition.sport)" alt="Card image cap">
+            <img class="card-img-top" :src='require("../assets/" + match.competition.sport +".jpg")' alt="Card image cap">
             <div class="card-body">
               <h5>{{ match.competition.sport }} - {{ match.competition.category }}</h5>
               <h6>{{ match.competition.name }}</h6>

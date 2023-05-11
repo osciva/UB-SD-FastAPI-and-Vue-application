@@ -32,6 +32,8 @@ templates = Jinja2Templates(directory="frontend/dist")
 
 models.Base.metadata.create_all(bind=engine) # Creem la base de dades amb els models que hem definit a SQLAlchemy
 
+
+
 # Dependency to get a DB session
 def get_db():
     db = SessionLocal()
@@ -40,10 +42,10 @@ def get_db():
     finally:
         db.close()
 
-
 @app.get("/")
-async def root():
-    return {"message": "Hello World"}
+async def serve_index(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
 
 
 
