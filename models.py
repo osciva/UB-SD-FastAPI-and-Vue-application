@@ -10,7 +10,7 @@ class Team(Base):
     __tablename__ = 'teams' #This is table name
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(30),unique=True, nullable=False, index=True)
+    name: str = Column(String(30),unique=True, nullable=False, index=True)
     country = Column(String(30),nullable=False)
     description = Column(String(100))
 
@@ -47,20 +47,24 @@ class Competition(Base):
     sport = Column(Enum(*sports_list),nullable=False)
     teams = relationship("Team",secondary=teams_in_competitions,backref="competitions")
     match = relationship("Match", backref="competitions")
+
 class Match(Base):
     __tablename__ = 'matches' #This is table name
-    __table_args__ = (UniqueConstraint('local_id', 'visitor_id', 'competition_id', 'date'),)
+    __table_args__ = (UniqueConstraint('local_id', 'visitor_id', 'competition_id', 'date'),) #'local_id', 'visitor_id' #Esto indica que no puede repetirse
 
     id = Column(Integer, primary_key=True)
     date = Column(DateTime, nullable=False)
     price = Column(Float, nullable=False)
+    #local = Column(String(30), nullable=False)
+    #visitor = Column(String(30), nullable=False)
     competition_id = Column(Integer, ForeignKey("competitions.id"), nullable=False)
-    competition = relationship("Competition",backref="matches")
+    competition = relationship(str, backref="matches")
 
     local_id = Column(Integer, ForeignKey("teams.id"), nullable=False)
     visitor_id = Column(Integer, ForeignKey("teams.id"), nullable=False)
-    local = relationship("Team", foreign_keys=local_id)
-    visitor = relationship("Team", foreign_keys=visitor_id)
+    local = relationship(str, foreign_keys=local_id)
+    visitor = relationship(str, foreign_keys=visitor_id)
+
 
 class Parent(Base):
     __tablename__ = 'parent'
