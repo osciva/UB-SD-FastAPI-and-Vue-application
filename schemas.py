@@ -69,16 +69,17 @@ class Match(MatchBase):
 
 class AccountBase(BaseModel):
     username: str
+    password: str
     available_money: float
     is_admin: int
 
 
 class AccountCreate(AccountBase):
-    password: str
+    pass
 
 
 class Account(AccountBase):
-    password: str
+
     orders: List["Order"] = []
 
     class Config:
