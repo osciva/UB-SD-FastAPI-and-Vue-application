@@ -67,3 +67,42 @@ class Match(MatchBase):
     class Config:
         orm_mode = True
 
+class AccountBase(BaseModel):
+    username: str
+    available_money: float
+    is_admin: int
+
+
+class AccountCreate(AccountBase):
+    password: str
+
+
+class Account(AccountBase):
+    password: str
+    orders: List["Order"] = []
+
+    class Config:
+        orm_mode = True
+
+
+class OrderBase(BaseModel):
+    match_id: int
+    tickets_bought: int
+
+
+class OrderCreate(OrderBase):
+    pass
+
+
+class Order(OrderBase):
+    id: int
+    username: str
+
+    class Config:
+        orm_mode = True
+
+
+
+
+
+

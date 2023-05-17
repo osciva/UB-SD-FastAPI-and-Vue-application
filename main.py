@@ -278,3 +278,34 @@ def get_teams_match(match_id: int,db: Session = Depends(get_db)):
 def get_competition_match(match_id: int,db: Session = Depends(get_db)):
     pass
 
+# ----------------------------------------ACCOUNTS Y ORDERS----------------------------------------
+@app.get('/orders/{username}', response_model=schemas.Order)
+def get_orders_by_username(username: str, db: Session = Depends(get_db)):
+    orders = repository.get_orders_by_username(db, username=username)
+    if not orders:
+        raise HTTPException(status_code=404, detail="Orders not found")
+    return orders
+
+@app.post('/account', response_model=schemas.Account)
+def create_account(account: schemas.AccountCreate,db: Session = Depends(get_db)):
+    db_account = repository.get_account_by_username(db, username=account.username)
+    if db_account:
+        raise HTTPException(status_code=400, detail="Team already Exists, Use put for updating")
+    else:
+        return repository.create_account(db=db, account=account)
+
+@app.get('/orders', response_model=List[schemas.Order])
+def get_orders(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    return repository.get_orders(db, skip=skip, limit=limit)
+
+@app.post('/orders/{username}', response_model=schemas.Order)
+def create_orders_by_username(username: str, order: schemas.OrderCreate, db: Session = Depends(get_db)):
+    db_orders = repository.get_orders_by_username(db, username=username)
+    if db_orders:
+        raise HTTPException(status_code=400, detail="Order already exists. Use PUT to update.")
+    else:
+        return repository.create_orders(db=db, username=username, order=order)
+
+
+
+
