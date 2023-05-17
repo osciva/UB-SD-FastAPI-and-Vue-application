@@ -30,7 +30,7 @@
 </template>
 
 <script>
-
+import axios from 'axios'
 export default {
   data () {
     return {
@@ -123,17 +123,43 @@ export default {
     addEventToCart (match) {
       this.matches_added.push(match)
     },
-    getMatchImage(sport) {
-      if (sport === 'Volleyball') {
-        return '../assets/volei1.jpg';
-      } else if (sport === 'Futsal') {
-        return "../assets/futsal1.jpg";
-      } else {
-        // si no hay imagen definida para el deporte, se muestra una imagen genérica
-        return '../assets/default.jpg';
-      }
+    getMatches () {
+      const pathMatches = 'http://localhost:8000/matches'
+      const pathCompetition = 'http://localhost:8000/competition/'
+
+      axios.get(pathMatches)
+        .then((res) => {
+          var matches = res.data.matches.filter((match) => {
+            return match.competition_id != null
+          })
+          var promises = []
+          for (let i = 0; i < matches.length; i++) {
+            const promise = axios.get(pathCompetition + matches[i].competition_id)
+              .then((resCompetition) => {
+                delete matches[i].competition_id
+                matches[i].competition = {
+                  'name': resCompetition.data.competition.name,
+                  'category': resCompetition.data.competition.category,
+                  'sport': resCompetition.data.competition.sport
+                }
+              })
+              .catch((error) => {
+                console.error(error)
+              })
+            promises.push(promise)
+          }
+          Promise.all(promises).then((_) => {
+            this.matches = matches
+          })
+        })
+        .catch((error) => {
+          console.error(error)
+        })
     }
 
+  },
+  created () {
+    this.getShows()
   }
 }
 
