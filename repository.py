@@ -2,7 +2,7 @@ from fastapi import HTTPException
 from numpy import select
 from sqlalchemy.orm import Session
 import models, schemas
-from models import Competition, Match, Team
+from models import Competition, Match, Team, Order, Account
 from schemas import CompetitionCreate, MatchCreate, TeamCreate
 
 
@@ -271,3 +271,41 @@ def get_teams_match(db: Session, match_id: int):
 
 def get_competition_match(db: Session, match_id: int):
     pass
+
+# ----------------------------------------ACCOUNTS Y ORDERS----------------------------------------
+def get_orders_by_username(db: Session, username: str):
+    print("Dentro de get_orders_by_username")
+    return db.query(Order).filter(Order.username == username).all()
+
+def get_account_by_username(db: Session, username: str):
+    print("Dentro de get_orders_by_username")
+    return db.query(Account).filter(Account.username == username).all()
+
+def create_account(db: Session, account: schemas.AccountCreate):
+    db_account = models.Account(username=account.username, available_money=account.available_money, is_admin= account.is_admin)
+
+    try:
+        db.add(db_account)
+        db.commit()
+        db.refresh(db_account)
+        return db_account
+    except:
+        db.rollback()
+        return "couldn't create the account"
+
+def create_orders(db: Session, order: schemas.OrderCreate):
+    db_orders = models.Order(match_id= Order.match_id, tickets_bought= order.tickets_bought)
+
+    try:
+        db.add(db_orders)
+        db.commit()
+        db.refresh(db_orders)
+        return db_orders
+    except:
+        db.rollback()
+        return "couldn't create the order"
+
+def get_orders(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(Order).offset(skip).limit(limit).all()
+
+
