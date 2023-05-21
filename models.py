@@ -25,6 +25,7 @@ teams_in_competitions = Table("teams_in_competitions",Base.metadata,
 class Category(str, enum.Enum):
     Senior = "Senior"
     Junior = "Junior"
+    Professional = "Professional"
 
 class Sports(str, enum.Enum):
     Volleyball = "Volleyball"

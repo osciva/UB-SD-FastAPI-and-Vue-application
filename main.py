@@ -300,8 +300,7 @@ def create_account(account: schemas.AccountCreate,db: Session = Depends(get_db))
     if db_account:
         raise HTTPException(status_code=400, detail="Team already Exists, Use put for updating")
     else:
-        return repository.\
-            create_account(db=db, account=account)
+        return repository.create_account(db=db, account=account)
 
 @app.get('/orders', response_model=List[schemas.Order])
 def get_orders(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
@@ -315,6 +314,8 @@ def create_orders_by_username(username: str, order: schemas.OrderCreate, db: Ses
     else:
         return repository.create_orders(db=db, username=username, order=order)
 
-
+@app.get('/accounts', response_model=List[schemas.Account])
+def get_accounts(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    return repository.get_accounts(db, skip=skip, limit=limit)
 
 

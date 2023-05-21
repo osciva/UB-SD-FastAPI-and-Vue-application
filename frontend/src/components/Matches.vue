@@ -129,6 +129,7 @@ export default {
     },
     addEventToCart (match) {
       this.matches_added.push(match)
+      match.total_available_tickets -= 1;
     },
     getMatches () {
       const pathMatches = 'http://localhost:8000/matches/'

@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 import models, schemas
 from models import Competition, Match, Team, Order, Account
 from schemas import CompetitionCreate, MatchCreate, TeamCreate
-
+from sqlalchemy import select
 
 # ----------------------------------------TEAMS----------------------------------------
 def get_team(db: Session, team_id: int):
@@ -231,6 +231,7 @@ def create_match(db: Session, match: MatchCreate):
     db_match = models.Match(
         date=match.date,
         price=match.price,
+        total_available_tickets=match.total_available_tickets,
         competition=competition,
         local=local_team,
         visitor=visitor_team
@@ -287,11 +288,12 @@ def get_competition_match(db: Session, match_id: int):
 
 # ----------------------------------------ACCOUNTS Y ORDERS----------------------------------------
 def get_orders_by_username(db: Session, username: str):
-    print("Dentro de get_orders_by_username")
-    return db.query(Order).filter(Order.username == username).all()
+    # acc = select(models.Account).where(models.Account.username == username)
+    # account: schemas.Account = db.execute(acc).scalar()
+    # return account.orders
+    return db.query(Order).filter(Account.username == username).all()
 
 def get_account_by_username(db: Session, username: str):
-    print("Dentro de get_orders_by_username")
     return db.query(Account).filter(Account.username == username).all()
 
 def create_account(db: Session, account: schemas.AccountCreate):
@@ -307,19 +309,44 @@ def create_account(db: Session, account: schemas.AccountCreate):
         db.rollback()
         return "couldn't create the account"
 
-def create_orders(db: Session, order: schemas.OrderCreate):
-    db_orders = models.Order(match_id= Order.match_id, tickets_bought= order.tickets_bought)
+def create_orders(db: Session, username:str, order: schemas.OrderCreate):
+    db_order = models.Order(match_id= order.match_id, tickets_bought= order.tickets_bought)
 
-    try:
-        db.add(db_orders)
-        db.commit()
-        db.refresh(db_orders)
-        return db_orders
-    except:
-        db.rollback()
-        return "couldn't create the order"
+    # para seleccionar una account y no la lista de accounts
+    acc = select(models.Account).where(models.Account.username == username)
+    # para que la account sea una Account y no un Select
+    account: schemas.Account = db.execute(acc).scalar()
+
+    # para seleccionar un Match y no la lista de Matches
+    match = select(models.Match).where(models.Match.id == order.match_id)
+    # para que el Match sea un Match y no un Select
+    game: schemas.Match = db.execute(match).scalar()
+    if account.available_money < (game.price * db_order.tickets_bought):
+        return "you don't have enough money"
+
+    if game.total_available_tickets < db_order.tickets_bought:
+        return "there are not enough tickets. Only " + account.available_money.toString() + "remaining"
+
+    else:
+        game.total_available_tickets -= db_order.tickets_bought
+        account.available_money -= (game.price * db_order.tickets_bought)
+
+        account.orders.append(db_order)
+        try:
+            db.add(db_order)
+            db.commit()
+            db.refresh(db_order)
+            return db_order
+        except:
+            db.rollback()
+            return "couldn't create the order"
+
+
 
 def get_orders(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Order).offset(skip).limit(limit).all()
+
+def get_accounts(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(Account).offset(skip).limit(limit).all()
 
 
