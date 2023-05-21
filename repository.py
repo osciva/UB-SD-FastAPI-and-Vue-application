@@ -141,7 +141,7 @@ def get_matches_competition(db: Session, competition_name: str):
     db_competition = get_competition_by_name(db, competition_name)
     if not db_competition:
         raise HTTPException(status_code=404, detail="Competition not found")
-    matches = get_matches(db_competition)
+    matches = db_competition.match
     return matches
 
 
@@ -149,7 +149,7 @@ def get_teams_competition(db: Session, competition_name: str):
     db_competition = get_competition_by_name(db, competition_name)
     if not db_competition:
         raise HTTPException(status_code=404, detail="Competition not found")
-    teams = get_teams(db_competition)
+    teams = db_competition.teams
     return teams
 
 # ----------------------------------------MATCHES----------------------------------------
@@ -266,11 +266,24 @@ def update_match(db: Session, match_id: int, match: MatchCreate):
     return db_match
 
 def get_teams_match(db: Session, match_id: int):
-    pass
+    db_match = get_match_by_id(db, match_id)
+    if not db_match:
+        raise HTTPException(status_code=404, detail="Match not found")
+    local_id = db_match.local_id
+    visitor_id = db_match.local_id
+    local = get_team(db, local_id)
+    visitor = get_team(db, visitor_id)
+    teams = [local, visitor]
+    return teams
 
 
 def get_competition_match(db: Session, match_id: int):
-    pass
+    db_match = get_match_by_id(db, match_id)
+    if not db_match:
+        raise HTTPException(status_code=404, detail="Match not found")
+    competition_id = db_match.competition_id
+    competition = get_competition(db, competition_id)
+    return competition
 
 # ----------------------------------------ACCOUNTS Y ORDERS----------------------------------------
 def get_orders_by_username(db: Session, username: str):
@@ -282,7 +295,8 @@ def get_account_by_username(db: Session, username: str):
     return db.query(Account).filter(Account.username == username).all()
 
 def create_account(db: Session, account: schemas.AccountCreate):
-    db_account = models.Account(username=account.username, available_money=account.available_money, is_admin= account.is_admin)
+    db_account = models.Account(username=account.username, available_money=account.available_money,
+                                is_admin=account.is_admin)
 
     try:
         db.add(db_account)

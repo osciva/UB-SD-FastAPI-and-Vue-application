@@ -30,6 +30,8 @@ class Sports(str, enum.Enum):
     Volleyball = "Volleyball"
     Football = "Football"
     Futsal = "Futsal"
+    Basketball = "Basketball"
+    Tennis = "Tennis"
 
 # categories_list = ("Senior","Junior")
 # sports_list = ("Volleyball","Football")
@@ -59,12 +61,12 @@ class Match(Base):
     #local = Column(String(30), nullable=False)
     #visitor = Column(String(30), nullable=False)
     competition_id = Column(Integer, ForeignKey("competitions.id"), nullable=False)
-    competition = relationship(str, backref="matches")
+    competition = relationship("Competition", backref="matches")
 
     local_id = Column(Integer, ForeignKey("teams.id"), nullable=False)
     visitor_id = Column(Integer, ForeignKey("teams.id"), nullable=False)
-    local = relationship(str, foreign_keys=local_id)
-    visitor = relationship(str, foreign_keys=visitor_id)
+    local = relationship("Team", foreign_keys=local_id)
+    visitor = relationship("Team", foreign_keys=visitor_id)
 
 class Account(Base):
     __tablename__ = 'accounts'

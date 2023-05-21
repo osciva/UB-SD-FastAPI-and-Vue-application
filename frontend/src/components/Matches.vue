@@ -1,14 +1,20 @@
 <template>
   <div id="app">
-    <h1> {{ message }} </h1>
-    <button class="btn btn-success btn-lg" @click="buyTicket" :disabled="money_available < price_match"> Buy ticket </button>
-    <button class="btn btn-danger btn-lg" @click="returnTicket" :disabled="tickets_bought === 0"> Return ticket </button>
-    <h4> Total tickets bought: {{ tickets_bought }} </h4>
-    <h4> Remaining tickets: {{ remaining_tickets }} </h4>
-    <h4> Match price: {{ price_match }} </h4>
-    <h4> Money available: {{ money_available }} </h4>
-
+<!--    <button class="btn btn-success btn-lg" @click="buyTicket" :disabled="money_available < price_match"> Buy ticket </button>-->
+<!--    <button class="btn btn-danger btn-lg" @click="returnTicket" :disabled="tickets_bought === 0"> Return ticket </button>-->
+<!--    <h4> Total tickets bought: {{ tickets_bought }} </h4>-->
+<!--    <h4> Remaining tickets: {{ remaining_tickets }} </h4>-->
+<!--    <h4> Match price: {{ price_match }} </h4>-->
+<!--    <h4> Money available: {{ money_available }} </h4>-->
     <div class="container">
+      <div class="row">
+        <div class="col">
+          <h1 style="text-align: start"> {{ message }} </h1>
+        </div>
+        <div class="col">
+           <button class="btn btn-outline-primary" style="background-color: white; text-align: right;">Veure cistella</button>
+        </div>
+      </div>
       <div class="row">
         <div class="col-lg-4 col-md-6 mb-4" v-for="(match) in matches" :key="match.id">
           <br>
@@ -20,7 +26,8 @@
               <h6><strong>{{ match.local.name }}</strong> ({{ match.local.country }}) vs <strong>{{ match.visitor.name }}</strong> ({{ match.visitor.country }})</h6>
               <h6>{{ match.date.substring(0,10) }}</h6>
               <h6>{{ match.price }} &euro;</h6>
-              <button class="btn btn-success" @click="addEventToCart(match)">Afegeix a la cistella</button>
+              <h6> Entrades disponibles: {{ match.total_available_tickets }}</h6>
+              <button class="btn btn-success"  @click="addEventToCart(match)">Afegeix a la cistella</button>
             </div>
           </div>
         </div>
@@ -34,72 +41,72 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      message: 'My first component',
+      message: 'Sport Matches',
       tickets_bought: 0,
       remaining_tickets: 15,
       money_available: 100,
       price_match: 10,
       matches: [
-  {
-    'id': 1,
-    'local': {
-      'id': 3,
-      'name': 'Club Juventut Les Corts',
-      'country': 'Spain'
-    },
-    'visitor': {
-      'id': 2,
-      'name': 'CE Sabadell',
-      'country': 'Spain'
-    },
-    'competition': {
-      'name': 'Women\'s European Championship',
-      'category': 'Senior',
-      'sport': 'Volleyball'
-    },
-    'date': '2022-10-12T00:00:00',
-    'price': 4.3
-  },
-  {
-    'id': 2,
-    'local': {
-      'id': 3,
-      'name': 'Club Juventut Les Corts',
-      'country': 'Spain'
-    },
-    'visitor': {
-      'id': 2,
-      'name': 'CE Sabadell',
-      'country': 'Spain'
-    },
-    'competition': {
-      'name': '1st Division League',
-      'category': 'Junior',
-      'sport': 'Futsal'
-    },
-    'date': '2022-07-10T00:00:00',
-    'price': 129.29
-  },
-  {
-    'id': 3,
-    'local': {
-      'id': 1,
-      'name': 'CV Vall D\'Hebron',
-      'country': 'Spain'
-    },
-    'visitor': {
-      'id': 4,
-      'name': 'Volei Rubi',
-      'country': 'Spain'
-    },
-    'competition': {
-      'name': '1st Division League',
-      'category': 'Junior',
-      'sport': 'Futsal'
-    },
-    'date': '2022-08-10T00:00:00',
-    'price': 111.1
-  }
+  // {
+  //   'id': 1,
+  //   'local': {
+  //     'id': 3,
+  //     'name': 'Club Juventut Les Corts',
+  //     'country': 'Spain'
+  //   },
+  //   'visitor': {
+  //     'id': 2,
+  //     'name': 'CE Sabadell',
+  //     'country': 'Spain'
+  //   },
+  //   'competition': {
+  //     'name': 'Women\'s European Championship',
+  //     'category': 'Senior',
+  //     'sport': 'Volleyball'
+  //   },
+  //   'date': '2022-10-12T00:00:00',
+  //   'price': 4.3
+  // },
+  // {
+  //   'id': 2,
+  //   'local': {
+  //     'id': 3,
+  //     'name': 'Club Juventut Les Corts',
+  //     'country': 'Spain'
+  //   },
+  //   'visitor': {
+  //     'id': 2,
+  //     'name': 'CE Sabadell',
+  //     'country': 'Spain'
+  //   },
+  //   'competition': {
+  //     'name': '1st Division League',
+  //     'category': 'Junior',
+  //     'sport': 'Futsal'
+  //   },
+  //   'date': '2022-07-10T00:00:00',
+  //   'price': 129.29
+  // },
+  // {
+  //   'id': 3,
+  //   'local': {
+  //     'id': 1,
+  //     'name': 'CV Vall D\'Hebron',
+  //     'country': 'Spain'
+  //   },
+  //   'visitor': {
+  //     'id': 4,
+  //     'name': 'Volei Rubi',
+  //     'country': 'Spain'
+  //   },
+  //   'competition': {
+  //     'name': '1st Division League',
+  //     'category': 'Junior',
+  //     'sport': 'Futsal'
+  //   },
+  //   'date': '2022-08-10T00:00:00',
+  //   'price': 111.1
+  // }
 ],
       matches_added: []
     }
@@ -124,24 +131,25 @@ export default {
       this.matches_added.push(match)
     },
     getMatches () {
-      const pathMatches = 'http://localhost:8000/matches'
-      const pathCompetition = 'http://localhost:8000/competition/'
+      const pathMatches = 'http://localhost:8000/matches/'
+      const pathCompetition = 'http://localhost:8000/competitions/'
 
       axios.get(pathMatches)
         .then((res) => {
-          var matches = res.data.matches.filter((match) => {
-            return match.competition_id != null
+          var matches = res.data.filter((match) => {
+            return match.competition.name != null
           })
           var promises = []
           for (let i = 0; i < matches.length; i++) {
-            const promise = axios.get(pathCompetition + matches[i].competition_id)
+            const promise = axios.get(pathCompetition + matches[i].competition.name)
               .then((resCompetition) => {
-                delete matches[i].competition_id
+                delete matches[i].competition.name
                 matches[i].competition = {
                   'name': resCompetition.data.competition.name,
                   'category': resCompetition.data.competition.category,
                   'sport': resCompetition.data.competition.sport
                 }
+                matches[i].total_available_tickets = resCompetition.data.total_available_tickets
               })
               .catch((error) => {
                 console.error(error)
@@ -156,11 +164,9 @@ export default {
           console.error(error)
         })
     }
-
   },
   created () {
-    this.getShows()
+    this.getMatches()
   }
 }
-
 </script>
