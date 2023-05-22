@@ -54,6 +54,7 @@ class MatchBase(BaseModel):
     local: Team
     visitor: Team
     competition: Competition #Asi funciona con postman y como deberia ser
+    total_available_tickets: int
 
 
 
@@ -63,23 +64,6 @@ class MatchCreate(MatchBase):
 
 class Match(MatchBase):
     id: int
-
-    class Config:
-        orm_mode = True
-
-class AccountBase(BaseModel):
-    username: str
-    available_money: float
-    is_admin: int
-
-
-class AccountCreate(AccountBase):
-    password: str
-
-
-class Account(AccountBase):
-    password: str
-    orders: List["Order"] = []
 
     class Config:
         orm_mode = True
@@ -100,6 +84,27 @@ class Order(OrderBase):
 
     class Config:
         orm_mode = True
+
+
+class AccountBase(BaseModel):
+    username: str
+    password: str
+    available_money: float
+    is_admin: int
+    orders: List[Order] = []
+
+
+class AccountCreate(AccountBase):
+    pass
+
+
+class Account(AccountBase):
+
+    class Config:
+        orm_mode = True
+
+
+
 
 
 

@@ -271,12 +271,20 @@ def update_match(match_id: int, match: schemas.MatchCreate, db: Session = Depend
 # retorna l'equip local i visitant d'un partit, donat el seu id.
 @app.get("/matches/{match_id}/teams", response_model=schemas.Match)
 def get_teams_match(match_id: int,db: Session = Depends(get_db)):
-    pass
+    db_match = repository.get_match(db=db, match_id=match_id)
+    if not db_match:
+        raise HTTPException(status_code=404, detail="Match not found")
+    teams = repository.get_teams_match(db=db, match_id=match_id)
+    return teams
 
 # retorna la competició d'un partit, donat el seu id.
 @app.get("/matches/{match_id}/competition", response_model=schemas.Match)
 def get_competition_match(match_id: int,db: Session = Depends(get_db)):
-    pass
+    db_match = repository.get_match(db=db, match_id=match_id)
+    if not db_match:
+        raise HTTPException(status_code=404, detail="Match not found")
+    competition = repository.get_competition_match()
+    return competition
 
 # ----------------------------------------ACCOUNTS Y ORDERS----------------------------------------
 @app.get('/orders/{username}', response_model=schemas.Order)
@@ -306,6 +314,8 @@ def create_orders_by_username(username: str, order: schemas.OrderCreate, db: Ses
     else:
         return repository.create_orders(db=db, username=username, order=order)
 
-
+@app.get('/accounts', response_model=List[schemas.Account])
+def get_accounts(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    return repository.get_accounts(db, skip=skip, limit=limit)
 
 
