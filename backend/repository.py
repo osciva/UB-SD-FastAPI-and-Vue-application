@@ -1,9 +1,9 @@
 from fastapi import HTTPException
 from numpy import select
 from sqlalchemy.orm import Session
-import models, schemas
-from models import Competition, Match, Team, Order, Account
-from schemas import CompetitionCreate, MatchCreate, TeamCreate
+from backend import models, schemas
+from backend.models import Competition, Match, Team, Order, Account
+from backend.schemas import CompetitionCreate, MatchCreate, TeamCreate
 from sqlalchemy import select
 
 # ----------------------------------------TEAMS----------------------------------------
@@ -291,7 +291,14 @@ def get_orders_by_username(db: Session, username: str):
     # acc = select(models.Account).where(models.Account.username == username)
     # account: schemas.Account = db.execute(acc).scalar()
     # return account.orders
-    return db.query(Order).filter(Account.username == username).all()
+    print("HOLAAAA")
+    print(username)
+    print("HOLAAA2")
+    print(models.Account.username)
+    constt = models.Account.username
+    print(constt)
+    print("HOLALAALAL")
+    return db.query(Order).filter(models.Account.username == username).all()
 
 def get_account_by_username(db: Session, username: str):
     return db.query(Account).filter(Account.username == username).all()
