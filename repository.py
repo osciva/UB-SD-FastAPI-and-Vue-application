@@ -291,7 +291,8 @@ def get_orders_by_username(db: Session, username: str):
     # acc = select(models.Account).where(models.Account.username == username)
     # account: schemas.Account = db.execute(acc).scalar()
     # return account.orders
-    return db.query(Order).filter(Account.username == username).all()
+    acc = db.query(models.Account).filter(models.Account.username == username).first()
+    return acc.orders
 
 def get_account_by_username(db: Session, username: str):
     return db.query(Account).filter(Account.username == username).all()

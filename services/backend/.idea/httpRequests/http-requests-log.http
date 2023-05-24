@@ -1,0 +1,180 @@
+DELETE http://127.0.0.1:8000/teams
+Content-Type: application/json
+Content-Length: 88
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{   "name": "CSC Futsal",
+    "country": "Spain",
+    "description": "Futbol Sala Team"}
+
+<> 2023-05-10T152351.405.json
+
+###
+
+POST http://127.0.0.1:8000/teams
+Content-Type: application/json
+Content-Length: 88
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{   "name": "CSC Futsal",
+    "country": "Spain",
+    "description": "Futbol Sala Team"}
+
+<> 2023-05-10T152350.200.json
+
+###
+
+GET http://127.0.0.1:8000
+Accept: application/json
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-05-10T152350-1.200.html
+
+###
+
+GET http://127.0.0.1:8000/hello/User
+Accept: application/json
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-05-10T152350.404.json
+
+###
+
+GET http://127.0.0.1:8000
+Accept: application/json
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-05-10T152350.200.html
+
+###
+
+DELETE http://127.0.0.1:8000/teams
+Content-Type: application/json
+Content-Length: 88
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{   "name": "CSC Futsal",
+    "country": "Spain",
+    "description": "Futbol Sala Team"}
+
+<> 2023-04-30T234239.405.json
+
+###
+
+POST http://127.0.0.1:8000/teams
+Content-Type: application/json
+Content-Length: 88
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{   "name": "CSC Futsal",
+    "country": "Spain",
+    "description": "Futbol Sala Team"}
+
+<> 2023-04-30T234232.200.json
+
+###
+
+GET http://127.0.0.1:8000
+Accept: application/json
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-04-30T234229.200.json
+
+###
+
+POST http://127.0.0.1:8000/teams
+Content-Type: application/json
+Content-Length: 88
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{   "name": "CSC Futsal",
+    "country": "Spain",
+    "description": "Futbol Sala Team"}
+
+<> 2023-04-17T171243.500.txt
+
+###
+
+POST http://127.0.0.1:8000/teams
+Content-Type: application/json
+Content-Length: 88
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{   "name": "CSC Futsal",
+    "country": "Spain",
+    "description": "Futbol Sala Team"}
+
+<> 2023-04-17T171237.500.txt
+
+###
+
+POST http://127.0.0.1:8000/teams
+Content-Type: application/json
+Content-Length: 88
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{   "name": "CSC Futsal",
+    "country": "Spain",
+    "description": "Futbol Sala Team"}
+
+<> 2023-04-17T171233.500.txt
+
+###
+
+GET http://127.0.0.1:8000/hello/User
+Accept: application/json
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-04-17T170954.200.json
+
+###
+
+GET http://127.0.0.1:8000/hello/User
+Accept: application/json
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-04-17T170949.200.json
+
+###
+
+POST http://127.0.0.1:8000/teams
+Content-Type: application/json
+Content-Length: 88
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.6)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{   "name": "CSC Futsal",
+    "country": "Spain",
+    "description": "Futbol Sala Team"}
+
+<> 2023-04-17T170939.500.txt
+
+###
+

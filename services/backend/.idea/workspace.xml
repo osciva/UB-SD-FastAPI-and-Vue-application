@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3e4cc616-fd6b-4492-9246-76c70120a6c0" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/Sessio_1.md" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/Sessio_1.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sessio_2.md" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/Sessio_2.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sessio_3.md" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/Sessio_3.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sessio_4.md" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/Sessio_4.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sessio_5.md" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/Sessio_5.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sessio_6.md" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/Sessio_6.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/DiagramaClases.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/DiagramaClases.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/NewProject_Env.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/NewProject_Env.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/errors.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/errors.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/newproject.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/newproject.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/sessio-3_bootstrap.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/sessio-3_bootstrap.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/sessio-3_buy-ticket.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/sessio-3_buy-ticket.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/sessio-3_dist.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/sessio-3_dist.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/sessio-3_final-matches-user.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/sessio-3_final-matches-user.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/sessio-3_final-matches.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/sessio-3_final-matches.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/sessio-3_final-shopping-cart.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/sessio-3_final-shopping-cart.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/sessio-3_final-signin.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/sessio-3_final-signin.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/sessio-3_first-component.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/sessio-3_first-component.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/sessio-3_src.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/sessio-3_src.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/sessio-3_vue-cli.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/sessio-3_vue-cli.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/sessio-3_vue-init.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/sessio-3_vue-init.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/sessio-3_vue.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/sessio-3_vue.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/sessio-4_api.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/sessio-4_api.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/sessio-4_cart-empty.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/sessio-4_cart-empty.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/sessio-4_cart-home.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/sessio-4_cart-home.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/sessio-4_cart.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/sessio-4_cart.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/sessio-4_ex1.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/sessio-4_ex1.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/sessio-5_create-account.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/sessio-5_create-account.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/sessio-5_login.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/sessio-5_login.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figures/sessio-5_user-status.png" beforeDir="false" afterPath="$PROJECT_DIR$/sessions/figures/sessio-5_user-status.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/backend/src/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/backend/src/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/repository.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/backend/src/repository.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requeriments.txt" beforeDir="false" afterPath="$PROJECT_DIR$/services/backend/requeriments.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/backend/src/schemas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_main.http" beforeDir="false" afterPath="$PROJECT_DIR$/services/backend/src/test_main.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/services/backend/src/test_main.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="FastAPI main" />
+        <option value="FastAPI test_main" />
+        <option value="Python Unit Test" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="FlaskConsoleOptions" custom-start-script="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))">
+    <envs>
+      <env key="FLASK_APP" value="app" />
+    </envs>
+    <option name="myCustomStartScript" value="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))" />
+    <option name="myEnvs">
+      <map>
+        <entry key="FLASK_APP" value="app" />
+      </map>
+    </option>
+  </component>
+  <component name="Git.Merge.Settings">
+    <option name="BRANCH" value="main" />
+  </component>
+  <component name="Git.Settings">
+    <excluded-from-favorite>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="main" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </excluded-from-favorite>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="frontend_I" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="b367cf18-1355-4f37-98e3-948eedebe07d" />
+        <option name="url" value="git@github.com:SoftwareDistribuitUB-2023/practica-2-a09.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2OViUYVxYsDOXLgPWSXLRdtHXkR" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/oscar/OneDrive/Escritorio/Treballs/Software Distribuit/P2/practica-2-a09/services&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\oscar\OneDrive\Escritorio\Treballs\Software Distribuit\P2\practica-2-a09\services" />
+      <recent name="C:\Users\oscar\OneDrive\Escritorio\Treballs\Software Distribuit\P2\practica-2-a09\backend\src" />
+      <recent name="C:\Users\oscar\OneDrive\Escritorio\Treballs\Software Distribuit\P2\practica-2-a09\sessions" />
+      <recent name="C:\Users\oscar\OneDrive\Escritorio\Treballs\Software Distribuit\P2\practica-2-a09\backend" />
+      <recent name="C:\Users\oscar\OneDrive\Escritorio\Treballs\Software Distribuit\P2\practica-2-a09\frontend" />
+    </key>
+  </component>
+  <component name="RunManager" selected="FastAPI.practica-2-a09">
+    <configuration name="All in test_main" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" path="$PROJECT_DIR$/test_main.http">
+      <method v="2" />
+    </configuration>
+    <configuration name="practica-2-a09" type="Python.FastAPI">
+      <option name="file" value="C:\Users\oscar\OneDrive\Escritorio\Treballs\Software Distribuit\P2\practica-2-a09\backend\src\main.py" />
+      <module name="practica-2-a09" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="C:\Users\oscar\OneDrive\Escritorio\Treballs\Software Distribuit\env\Scripts\python.exe" />
+      <option name="SDK_NAME" value="Python 3.8 (env)" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for services.backend.src.test_main.test_create_match" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="practica-2-a09" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;services.backend.src.test_main.test_create_match&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for services.backend.src.test_main.test_create_team" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="practica-2-a09" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;services.backend.src.test_main.test_create_team&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for services.backend.src.test_main.test_delete_team" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="practica-2-a09" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;services.backend.src.test_main.test_delete_team&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Python tests for services.backend.src.test_main.test_read_competitions" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="practica-2-a09" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;services.backend.src.test_main.test_read_competitions&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="FastAPI.practica-2-a09" />
+      <item itemvalue="HTTP Request.All in test_main" />
+      <item itemvalue="Python tests.Python tests for services.backend.src.test_main.test_create_match" />
+      <item itemvalue="Python tests.Python tests for services.backend.src.test_main.test_create_team" />
+      <item itemvalue="Python tests.Python tests for services.backend.src.test_main.test_delete_team" />
+      <item itemvalue="Python tests.Python tests for services.backend.src.test_main.test_read_competitions" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python tests.Python tests for services.backend.src.test_main.test_delete_team" />
+        <item itemvalue="Python tests.Python tests for services.backend.src.test_main.test_create_team" />
+        <item itemvalue="Python tests.Python tests for services.backend.src.test_main.test_read_competitions" />
+        <item itemvalue="Python tests.Python tests for services.backend.src.test_main.test_create_match" />
+        <item itemvalue="HTTP Request.All in test_main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3e4cc616-fd6b-4492-9246-76c70120a6c0" name="Changes" comment="" />
+      <created>1681652165591</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1681652165591</updated>
+      <workItem from="1681652194554" duration="5568000" />
+      <workItem from="1681724343161" duration="3960000" />
+      <workItem from="1681744024585" duration="3624000" />
+      <workItem from="1681772989382" duration="702000" />
+      <workItem from="1681773734083" duration="107000" />
+      <workItem from="1681773853322" duration="1122000" />
+      <workItem from="1681774993755" duration="1170000" />
+      <workItem from="1681776179876" duration="4722000" />
+      <workItem from="1681816392123" duration="3531000" />
+      <workItem from="1681823339228" duration="222000" />
+      <workItem from="1681916592162" duration="244000" />
+      <workItem from="1681923711273" duration="6826000" />
+      <workItem from="1681982128745" duration="681000" />
+      <workItem from="1682007857544" duration="666000" />
+      <workItem from="1682157176384" duration="9513000" />
+      <workItem from="1682335058139" duration="1263000" />
+      <workItem from="1682336351254" duration="1150000" />
+      <workItem from="1682340456768" duration="1080000" />
+      <workItem from="1682415888975" duration="4944000" />
+      <workItem from="1682435009526" duration="64000" />
+      <workItem from="1682518190777" duration="1557000" />
+      <workItem from="1682530554001" duration="5715000" />
+      <workItem from="1682765161325" duration="292000" />
+      <workItem from="1682767187826" duration="912000" />
+      <workItem from="1682768135500" duration="760000" />
+      <workItem from="1682889292862" duration="2218000" />
+      <workItem from="1682937168675" duration="1954000" />
+      <workItem from="1682955668535" duration="3523000" />
+      <workItem from="1682973030340" duration="213000" />
+      <workItem from="1683108365296" duration="5874000" />
+      <workItem from="1683145042979" duration="718000" />
+      <workItem from="1683205549598" duration="5247000" />
+      <workItem from="1683211802202" duration="2016000" />
+      <workItem from="1683217301528" duration="280000" />
+      <workItem from="1683217605557" duration="3392000" />
+      <workItem from="1683221036962" duration="271000" />
+      <workItem from="1683222905501" duration="77000" />
+      <workItem from="1683223003632" duration="620000" />
+      <workItem from="1683223980150" duration="173000" />
+      <workItem from="1683224497631" duration="79000" />
+      <workItem from="1683280951450" duration="418000" />
+      <workItem from="1683281383098" duration="4377000" />
+      <workItem from="1683297043107" duration="320000" />
+      <workItem from="1683304515351" duration="559000" />
+      <workItem from="1683305164489" duration="68000" />
+      <workItem from="1683308708973" duration="877000" />
+      <workItem from="1683371359115" duration="709000" />
+      <workItem from="1683373921621" duration="2009000" />
+      <workItem from="1683480702573" duration="2381000" />
+      <workItem from="1683483127960" duration="97000" />
+      <workItem from="1683483263557" duration="2587000" />
+      <workItem from="1683711646380" duration="3588000" />
+      <workItem from="1683720629194" duration="1302000" />
+      <workItem from="1683724407366" duration="7498000" />
+      <workItem from="1683733529666" duration="61000" />
+      <workItem from="1683734175142" duration="1059000" />
+      <workItem from="1683735260569" duration="1502000" />
+      <workItem from="1683799534671" duration="1199000" />
+      <workItem from="1683800751803" duration="1754000" />
+      <workItem from="1683903949670" duration="108000" />
+      <workItem from="1684243768374" duration="74000" />
+      <workItem from="1684243862892" duration="970000" />
+      <workItem from="1684246144034" duration="38000" />
+      <workItem from="1684337856880" duration="2387000" />
+      <workItem from="1684340571930" duration="929000" />
+      <workItem from="1684343332178" duration="1211000" />
+      <workItem from="1684346739021" duration="76000" />
+      <workItem from="1684491421694" duration="3037000" />
+      <workItem from="1684495960174" duration="816000" />
+      <workItem from="1684658160566" duration="14230000" />
+      <workItem from="1684686959214" duration="17108000" />
+      <workItem from="1684766311349" duration="6080000" />
+      <workItem from="1684852745262" duration="828000" />
+      <workItem from="1684882734730" duration="8246000" />
+      <workItem from="1684891758407" duration="519000" />
+      <workItem from="1684914822453" duration="3954000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/practica_2_a09$.coverage" NAME=" Coverage Results" MODIFIED="1683283089631" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/practica_2_a09$practica_2_a09.coverage" NAME="practica-2-a09 Coverage Results" MODIFIED="1684917710764" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+  </component>
+</project>

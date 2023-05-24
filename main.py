@@ -287,7 +287,7 @@ def get_competition_match(match_id: int,db: Session = Depends(get_db)):
     return competition
 
 # ----------------------------------------ACCOUNTS Y ORDERS----------------------------------------
-@app.get('/orders/{username}', response_model=schemas.Order)
+@app.get('/orders/{username}', response_model= List[schemas.Order])
 def get_orders_by_username(username: str, db: Session = Depends(get_db)):
     orders = repository.get_orders_by_username(db, username=username)
     if not orders:
