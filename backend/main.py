@@ -308,7 +308,9 @@ def get_orders(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
 
 @app.post('/orders/{username}', response_model=schemas.Order)
 def create_orders_by_username(username: str, order: schemas.OrderCreate, db: Session = Depends(get_db)):
+    print("111111")
     db_orders = repository.get_orders_by_username(db, username=username)
+    print("222222")
     if db_orders:
         raise HTTPException(status_code=400, detail="Order already exists. Use PUT to update.")
     else:

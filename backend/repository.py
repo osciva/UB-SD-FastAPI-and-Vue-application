@@ -298,7 +298,10 @@ def get_orders_by_username(db: Session, username: str):
     constt = models.Account.username
     print(constt)
     print("HOLALAALAL")
-    return db.query(Order).filter(models.Account.username == username).all()
+    pep= db.query(models.Account).filter(Account.username == username).first()
+    print(str(pep.orders))
+    print("KAKKAKA")
+    return pep
 
 def get_account_by_username(db: Session, username: str):
     return db.query(Account).filter(Account.username == username).all()
