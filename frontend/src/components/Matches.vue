@@ -43,8 +43,8 @@
                   <td><button class="btn btn-outline-danger" @click="removeEventOfCart(match)"> Eliminar entrada </button></td>
               </tbody>
             </table>
-            <button v-if="matches_added.length > 0" class="btn btn-secondary" @click="veureCistella"> Enrere </button>
-            <button v-if="matches_added.length > 0" class="btn btn-success" @click="addPurchase"> Finalitzar la compra </button>
+            <button v-if="matches_added.length > 0" class="btn btn-secondary" @click="veureCistella()"> Enrere </button>
+            <button v-if="matches_added.length > 0" class="btn btn-success" @click="finalizePurchase()"> Finalitzar la compra </button>
             <p v-else>Your cart is currently empty.</p>
 	        </div>
 	        <div v-else class="container">
@@ -137,12 +137,19 @@ export default {
         match.total_available_tickets += match.ticketCount;
       }
     },
-    addPurchase () {
-      const path = 'http://localhost:8000/order/test'
-      const parameters = {
-        match_id: this.matches_added[i].match.id,
-        tickets_bought: this.matches_added[i].quantity
+    finalizePurchase () {
+      console.log('Finalize Purchase clicked');
+      for (let i = 0; i < this.matches_added.length; i += 1) {
+        const parameters = {
+          match_id: this.matches_added[i].id,
+          tickets_bought: this.matches_added[i].ticketCount
+        }
+        this.addPurchase(parameters)
       }
+    },
+    addPurchase(parameters) {
+      console.log('addPurchase achieved');
+      const path = 'http://localhost:8000/orders/oscar'
       axios.post(path, parameters)
         .then(() => {
           console.log('Order done')
