@@ -1,5 +1,4 @@
-import enum
-from models import sports_list, categories_list, Category, Sports
+from backend.src.models import Category, Sports
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime

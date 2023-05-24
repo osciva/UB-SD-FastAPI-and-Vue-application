@@ -1,5 +1,5 @@
 
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, HTTPException
 from sqlalchemy.orm import Session
 
 import repository, models, schemas
@@ -55,7 +55,7 @@ def read_teams(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     return repository.get_teams(db, skip=skip, limit=limit)
 
 @app.post("/teams/", response_model=schemas.Team)
-def create_team(team: schemas.TeamCreate,db: Session = Depends(get_db)):
+def create_team(team: schemas.TeamCreate, db: Session = Depends(get_db)):
     db_team = repository.get_team_by_name(db, name=team.name)
     if db_team:
         raise HTTPException(status_code=400, detail="Team already Exists, Use put for updating")
@@ -76,7 +76,7 @@ def delete_team(team_name: str, db: Session = Depends(get_db)):
     team = repository.get_team_by_name(db, name=team_name)
     if not team:
         raise HTTPException(status_code=404, detail="Team not found")
-    repository.delete_team(db=db,team_name=team_name)
+    repository.delete_team(db=db, team_name=team_name)
     return {"message": f"{team_name} has been deleted successfully."}
 
 
@@ -295,7 +295,7 @@ def get_orders_by_username(username: str, db: Session = Depends(get_db)):
     return orders
 
 @app.post('/account', response_model=schemas.Account)
-def create_account(account: schemas.AccountCreate,db: Session = Depends(get_db)):
+def create_account(account: schemas.AccountCreate, db: Session = Depends(get_db)):
     db_account = repository.get_account_by_username(db, username=account.username)
     if db_account:
         raise HTTPException(status_code=400, detail="Team already Exists, Use put for updating")
