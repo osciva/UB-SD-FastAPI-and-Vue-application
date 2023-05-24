@@ -214,7 +214,7 @@ Creem els esquemes Base per a cada model, que tenen atributs en comú, tant per 
 
 ```python
 import enum
-from backend.src.schemas import sports_list, categories_list
+from services.backend.src.schemas import sports_list, categories_list
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
@@ -288,7 +288,7 @@ Importarem la sessió de SQLAlchemy per interactuar amb la BD, els models i els 
 ```python
 from sqlalchemy.orm import Session
 import schemas
-from backend.src import schemas
+from services.backend.src import schemas
 
 
 def get_team(db: Session, team_id: int):
@@ -324,7 +324,7 @@ from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
 import schemas
-from backend.src import repository, schemas
+from services.backend.src import repository, schemas
 from database import SessionLocal, engine
 
 models.Base.metadata.create_all(bind=engine)  # Creem la base de dades amb els models que hem definit a SQLAlchemy

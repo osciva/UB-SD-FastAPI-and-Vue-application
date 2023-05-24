@@ -2,8 +2,10 @@
 from fastapi import Depends, HTTPException
 from sqlalchemy.orm import Session
 
-import repository, models, schemas
-from database import SessionLocal, engine
+from services.backend.src import repository
+from services.backend.src import schemas
+from services.backend.src import models
+from services.database import SessionLocal, engine, createSession
 from typing import List
 
 from fastapi import FastAPI
@@ -16,17 +18,17 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:8080"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
-app.mount("/static", StaticFiles(directory="frontend/dist/static"), name="static")
+app.mount("/static", StaticFiles(directory="services/frontend/dist/static"), name="static")
 
 
-templates = Jinja2Templates(directory="frontend/dist")
+templates = Jinja2Templates(directory="services/frontend/dist")
 
 
 
@@ -36,7 +38,8 @@ models.Base.metadata.create_all(bind=engine) # Creem la base de dades amb els mo
 
 # Dependency to get a DB session
 def get_db():
-    db = SessionLocal()
+    db = createSession()
+
     try:
         yield db
     finally:
@@ -287,7 +290,7 @@ def get_competition_match(match_id: int,db: Session = Depends(get_db)):
     return competition
 
 # ----------------------------------------ACCOUNTS Y ORDERS----------------------------------------
-@app.get('/orders/{username}', response_model=schemas.Order)
+@app.get('/orders/{username}', response_model= List[schemas.Order])
 def get_orders_by_username(username: str, db: Session = Depends(get_db)):
     orders = repository.get_orders_by_username(db, username=username)
     if not orders:
@@ -319,3 +322,8 @@ def get_accounts(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     return repository.get_accounts(db, skip=skip, limit=limit)
 
 
+# from app.deps import get_current_user
+#
+# @app.get('/account', summary='Get details of currently logged in user', response_model=SytemAccount
+# async def get_me(user: SystemAccount = Depends(get_current_user)):
+#     return user

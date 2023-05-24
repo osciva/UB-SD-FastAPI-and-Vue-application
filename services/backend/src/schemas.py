@@ -1,4 +1,4 @@
-from backend.src.models import Category, Sports
+from services.backend.src.models import Category, Sports
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
@@ -102,8 +102,12 @@ class Account(AccountBase):
     class Config:
         orm_mode = True
 
-
-
+    # class TokenPayload(BaseModel):
+    #     sub: str = None
+    #     exp: int = None
+    #
+    # class SystemAccount(Account):
+    #     password: str
 
 
 

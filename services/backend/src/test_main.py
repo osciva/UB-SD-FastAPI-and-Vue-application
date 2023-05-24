@@ -1,4 +1,4 @@
-from backend.src.main import app, get_db
+from services.backend.src.main import app, get_db
 from fastapi.testclient import TestClient
 from schemas import *
 

@@ -3,7 +3,7 @@ import enum
 from sqlalchemy import Boolean, MetaData, Column, ForeignKey, Integer, String, Date, DateTime, Float, Enum, UniqueConstraint, Table
 from sqlalchemy.orm import relationship
 
-from database import Base
+from services.database import Base
 
 
 class Team(Base):
