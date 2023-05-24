@@ -2,10 +2,9 @@
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
-import repository, models, schemas
+from backend import repository, models, schemas
 from database import SessionLocal, engine
 from typing import List
-
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -289,6 +288,7 @@ def get_competition_match(match_id: int,db: Session = Depends(get_db)):
 # ----------------------------------------ACCOUNTS Y ORDERS----------------------------------------
 @app.get('/orders/{username}', response_model= List[schemas.Order])
 def get_orders_by_username(username: str, db: Session = Depends(get_db)):
+    print("PEEPEPEPEPE")
     orders = repository.get_orders_by_username(db, username=username)
     if not orders:
         raise HTTPException(status_code=404, detail="Orders not found")
