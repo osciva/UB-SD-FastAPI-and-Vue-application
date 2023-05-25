@@ -1,11 +1,9 @@
-#mport enum
+# mport enum
 from backend.models import sports_list, categories_list, Category, Sports
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
 from typing import List
-
-
 
 
 class TeamBase(BaseModel):
@@ -31,7 +29,6 @@ class CompetitionBase(BaseModel):
     sport: Sports
 
 
-
 class CompetitionCreate(CompetitionBase):
     pass
 
@@ -39,7 +36,8 @@ class CompetitionCreate(CompetitionBase):
 class Competition(CompetitionBase):
     id: int
     teams: List[Team] = []
-   # matches: List[Match] = []
+
+    # matches: List[Match] = []
 
     class Config:
         orm_mode = True
@@ -53,9 +51,8 @@ class MatchBase(BaseModel):
     competition: str"""
     local: Team
     visitor: Team
-    competition: Competition #Asi funciona con postman y como deberia ser
+    competition: Competition  # Asi funciona con postman y como deberia ser
     total_available_tickets: int
-
 
 
 class MatchCreate(MatchBase):
@@ -95,19 +92,29 @@ class AccountBase(BaseModel):
 
 
 class AccountCreate(AccountBase):
-    pass
-
-
-class Account(AccountBase):
+    username: str = Field(..., description="username")
+    password: str = Field(..., min_length=8, max_length=24, description="user password")
 
     class Config:
         orm_mode = True
 
+    pass
 
 
+class Account(AccountBase):
+    class Config:
+        orm_mode = True
 
 
+class TokenSchema(BaseModel):
+    access_token: str
+    refresh_token: str
 
 
+class TokenPayload(BaseModel):
+    sub: str = None
+    exp: int = None
 
 
+class SystemAccount(Account):
+    password: str

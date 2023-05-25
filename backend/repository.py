@@ -6,6 +6,9 @@ from backend.models import Competition, Match, Team, Order, Account
 from backend.schemas import CompetitionCreate, MatchCreate, TeamCreate
 from sqlalchemy import select
 
+from backend.utils import get_hashed_password
+
+
 # ----------------------------------------TEAMS----------------------------------------
 def get_team(db: Session, team_id: int):
     print("get_team", team_id)
@@ -295,11 +298,16 @@ def get_orders_by_username(db: Session, username: str):
     return acc.orders
 
 def get_account_by_username(db: Session, username: str):
-    return db.query(Account).filter(Account.username == username).all()
+    return db.query(Account).filter(Account.username == username).first()
 
-def create_account(db: Session, account: schemas.AccountCreate):
-    db_account = models.Account(username=account.username, available_money=account.available_money,
-                                is_admin=account.is_admin)
+def create_account(db: Session, account: schemas.AccountBase, password: str):
+
+    db_account = models.Account(
+        username=account.username,
+        available_money=account.available_money,
+        is_admin=account.is_admin
+    )
+    db_account.password = get_hashed_password(password)
 
     try:
         db.add(db_account)
@@ -351,3 +359,28 @@ def get_accounts(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Account).offset(skip).limit(limit).all()
 
 
+def delete_account(db: Session, username: str):
+    account = get_account_by_username(db, username)
+    if not account:
+        raise HTTPException(status_code=404, detail="Account not found")
+    db.delete(account)
+    db.commit()
+    return {"message": f"{account.username} has been deleted successfully."}
+
+
+def update_account(db: Session, username: str, acc: Account):
+    db_account = get_account_by_username(db, username)
+    if not db_account:
+        raise HTTPException(status_code=404, detail="Account not found")
+    try:
+        db_account.username = acc.username
+        db_account.password = get_hashed_password(acc.password)
+        db_account.available_money = acc.available_money
+        db_account.is_admin = acc.is_admin
+        db_account.orders = acc.orders
+        db.commit()
+        db.refresh(db_account)
+        return db_account
+    except:
+        db.rollback()
+        return {"message": "couldn't update the account"}
