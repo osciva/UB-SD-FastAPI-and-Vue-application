@@ -68,7 +68,7 @@ Definirem l'estructura "Teams" que defineix el nom de la taula, el nom, el tipus
 
 ```python
 
-class Teams(Base):
+class Team(Base):
     __tablename__ = 'teams' #This is table name
 
     id = Column(Integer, primary_key=True)
@@ -214,17 +214,15 @@ Creem els esquemes Base per a cada model, que tenen atributs en comú, tant per 
 
 ```python
 import enum
-from schemas import sports_list, categories_list
+from models import sports_list, categories_list
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
-
 
 class TeamBase(BaseModel):
     name: str
     country: str
     description: Optional[str] = None
-
 
 class TeamCreate(TeamBase):
     pass
@@ -239,10 +237,9 @@ class Team(TeamBase):
 
 class CompetitionBase(BaseModel):
     name: str
-    category: enum.Enum(*categories_list)
-    sport: enum.Enum(*sports_list)
-
-
+    category: enum.Enum('category',dict(zip(categories_list,categories_list)))
+    sport:  enum.Enum('sport',dict(zip(sports_list,sports_list)))
+    
 class CompetitionCreate(CompetitionBase):
     pass
 
@@ -258,9 +255,9 @@ class Competition(CompetitionBase):
 class MatchBase(BaseModel):
     date: datetime
     price: float
-    local: Team
-    visitor: Team
-    competition: Competition
+    local: TeamBase
+    visitor: TeamBase
+    competition: CompetitionBase
 
 
 class MatchCreate(MatchBase):
@@ -269,6 +266,9 @@ class MatchCreate(MatchBase):
 
 class Match(MatchBase):
     id: int
+    local: Team
+    visitor: Team
+    competition: Competition
 
     class Config:
         orm_mode = True
@@ -287,20 +287,16 @@ Importarem la sessió de SQLAlchemy per interactuar amb la BD, els models i els 
 
 ```python
 from sqlalchemy.orm import Session
-import schemas, schemas
-
+import models, schemas
 
 def get_team(db: Session, team_id: int):
     return db.query(models.Team).filter(models.Team.id == team_id).first()
 
-
 def get_team_by_name(db: Session, name: str):
     return db.query(models.Team).filter(models.Team.name == name).first()
 
-
 def get_teams(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Team).offset(skip).limit(limit).all()
-
 
 def create_team(db: Session, team: schemas.TeamCreate):
     db_team = models.Team(name=team.name, country=team.country, description=team.description)
@@ -322,13 +318,12 @@ Actualitzem el fitxer `main.py`
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
-import repository, schemas, schemas
+import repository, models, schemas
 from database import SessionLocal, engine
 
-models.Base.metadata.create_all(bind=engine)  # Creem la base de dades amb els models que hem definit a SQLAlchemy
+models.Base.metadata.create_all(bind=engine) # Creem la base de dades amb els models que hem definit a SQLAlchemy
 
 app = FastAPI()
-
 
 # Dependency to get a DB session
 def get_db():
@@ -338,23 +333,20 @@ def get_db():
     finally:
         db.close()
 
-
 @app.get("/teams/", response_model=list[schemas.Team])
 def read_teams(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     return repository.get_teams(db, skip=skip, limit=limit)
 
-
 @app.post("/teams/", response_model=schemas.Team)
-def create_team(team: schemas.TeamCreate, db: Session = Depends(get_db)):
+def create_team(team: schemas.TeamCreate,db: Session = Depends(get_db)):
     db_team = repository.get_team_by_name(db, name=team.name)
     if db_team:
         raise HTTPException(status_code=400, detail="Team already Exists, Use put for updating")
     else:
         return repository.create_team(db=db, team=team)
 
-
 @app.get("/team/{team_name}", response_model=schemas.Team)
-def read_team(team_name: str, db: Session = Depends(get_db)):
+def read_team(team_name: str,db: Session = Depends(get_db)):
     team = repository.get_team_by_name(db, name=team_name)
     if not team:
         raise HTTPException(status_code=404, detail="Team not found")
@@ -408,7 +400,6 @@ except:
 Codis d'errors del protocol HTTP: ![image](figures/errors.png)
 
 
-   
     
 
 
