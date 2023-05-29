@@ -413,18 +413,27 @@ def update_account(username: str, acc: schemas.Account, db: Session = Depends(ge
 
 
 @app.post('/login', summary="Create access and refresh tokens for user", response_model=schemas.TokenSchema)
-async def login(form_data: OAuth2PasswordRequestForm = Depends()):
+async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     username = form_data.username
     password = form_data.password
     # get user from database
+    user = repository.get_account_by_username(db=db,username=username)
     # if user does not exist, raise an exception
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
     # if user exist, verify password using verify_password function
-    # if password is not correct, raise an exception
-    # if password is correct, create access and refresh tokens and return them
-    return {
-        "access_token": create_access_token(user['username']),
-        "refresh_token": create_refresh_token(user['username']),
-    }
+    else:
+        pwd = verify_password(password=password, hashed_pass=get_hashed_password(password))
+        # if password is not correct, raise an exception
+        if not pwd:
+            raise HTTPException(status_code=404, detail="Incorrect Password")
+
+        # if password is correct, create access and refresh tokens and return them
+        if pwd:
+            return {
+                "access_token": create_access_token(user.username),
+                "refresh_token": create_refresh_token(user.username),
+            }
 
 
 @app.get('/account', summary='Get details of currently logged in user', response_model=SystemAccount)
