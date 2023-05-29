@@ -186,7 +186,7 @@ Després de la instal·lació, configureu el fitxer `main.js` important el Boots
 
 ```html
 import BootstrapVue from 'bootstrap-vue'
-import '@/../bootstrap/css/bootstrap.css'
+import 'bootstrap/dist/css/bootstrap.css'
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -308,7 +308,6 @@ from fastapi.staticfiles import StaticFiles
 app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="frontend/dist/static"), name="static")
-)
 ```
 
 I declareu una ruta per renderitzar la plantilla:

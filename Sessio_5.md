@@ -42,7 +42,7 @@ La funció `verify_password` agafa un password en clar i un hash i comprova si e
 
 ### Crear i assignar JWT (JSON Web Token)
 
-Un JWT és un estàndard obert (RFC 7519) que defineix una forma compacta i autònoma per a la transmissió segura d'informació entre parts com un objecte JSON. Aquesta informació pot ser verificada i confiada perquè està signada digitalment. Els JWT es poden signar mitjançant un algoritme HMAC (clau secreta) o un parell de claus RSA / EC (clau pública i privada).
+Un JWT és un estàndard obert (RFC 7519) que defineix una forma compacta i autònoma per a la transmissió segura d'informació entre parts com a un objecte JSON. Aquesta informació pot ser verificada i confiada perquè està signada digitalment. Els JWT es poden signar mitjançant un algoritme HMAC (clau secreta) o un parell de claus RSA / EC (clau pública i privada).
 Usarem la llibreria jose, instal·leu-la fent:
 
         pip3 install jose
@@ -95,6 +95,15 @@ Les variables jwt_secret_key i jwt_refresh_secret_key són les claus secretes qu
 JWT_SECRET_KEY="Alguna cosa secreta"
 JWT_REFRESH_SECRET_KEY="Alguna altra cosa secreta"
 ```
+I instal·leu la llibreria `python-dotenv` fent:
+
+        pip3 install python-dotenv
+
+Quan executeu el servidor si no us troba el fitxer .env, heu d'especificar on es troba el fitxer `.env` fent:
+
+        python3 -m uvicorn main:app --env-file path/fitxer/.env
+
+Recordeu que el fitxer .env està en el gitignore, i per tant l'heu de crear en local cada cop que feu un git clone.
 
 L'única diferència entre les dues funcions és que el temps de caducitat per refrescar els tokens és més llarg que el temps de caducitat dels tokens d'accés. Això és perquè els tokens d'accés s'han de renovar amb més freqüència que els tokens de refresc.
 Aquestes funcions reben un subjecte que pot ser qualsevol cosa (en el nostre cas serà un nom d'usuari) i opcionalment un temps de caducitat. Si no s'especifica el temps de caducitat, s'utilitza el temps de caducitat predeterminat que hem definit a la classe Settings.
@@ -197,7 +206,7 @@ En cas de resposta correcte veureu els tokens generats.
 
 Protegir els endpoints
 ----------------------
-Ara que ja tenim suport per a l'autentificació, podem posar enpoints protegits per tal que només usuaris amb privilegis com l'administrador o usuaris registrats
+Ara que ja tenim suport per a l'autentificació, podem posar endpoints protegits per tal que només usuaris amb privilegis com l'administrador o usuaris registrats
 puguin accedir-hi. Per això, heu de modificar els endpoints de la següent manera:
 Per fer-ho crearem dependències que ens permetran verificar si l'usuari té accés a l'endpoint.
 Aquestes dependències es poden afegir com a paràmetres a les funcions dels endpoints, s'executen abans que la funció i poden retornar un valor que s'utilitzarà com a paràmetre per a la funció.
@@ -273,8 +282,8 @@ Per provar aquesta dependència, afegiu-la com a dependència en l'endpoint `@ap
 ```
 from app.deps import get_current_user
 
-@app.get('/account', summary='Get details of currently logged in user', response_model=UserOut)
-async def get_me(user: User = Depends(get_current_user)):
+@app.get('/account', summary='Get details of currently logged in user', response_model=SytemAccount
+async def get_me(user: SystemAccount = Depends(get_current_user)):
     return user
 ```
 Comproveu en la documentació com ara /account requereix un token per a ser accedit.
@@ -305,8 +314,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Shows',
-      component: Shows
+      name: 'Matches',
+      component: Matches
     },
     {
       path: '/userlogin',
@@ -358,15 +367,17 @@ Per comprovar l’usuari, hem de fer POST a /login per obtenir el token que util
 
 ```javascript
 checkLogin () {
-  const parameters = {
-    username: this.username,
-    password: this.password
+  const parameters = 'username=' + this.username + '&password=' + this.password
+  const config = {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   }
-  const path = 'http://localhost:5000/login'
-  axios.post(path, parameters)
+  const path = 'http://localhost:8000/login'
+  axios.post(path, parameters, config)
     .then((res) => {
       this.logged = true
-      this.token = res.data.token
+      this.token = res.data.token.access_token
       this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token } })
     })
     .catch((error) => {
@@ -383,7 +394,7 @@ Observem que estem fent servir una eina per canviar la ruta actual del component
 this.$router.push({ path: '/', query: { username: this.username, logged: this.logged, token: this.token } })
 ```
 
-Els parametres uqe passem ens permeten donar a la vista principal l'informació sobre l’usuari. "username" conté el nom d'usuari actual, "logged" és un booleà que mostra si l'usuari ha iniciat la sessió correctament i "token" és la string del token per a poder enviar requests autoritzades.
+Els paràmetres que passem ens permeten donar a la vista principal la informació sobre l’usuari. "username" conté el nom d'usuari actual, "logged" és un booleà que mostra si l'usuari ha iniciat la sessió correctament i "token" és la string del token per a poder enviar requests autoritzades.
 
 Per consumir la informació de la consulta des de la vista `Matches`, hem d'inicialitzar els atributs a data i podem utilitzar les línies següents a `created()`:
 
@@ -399,7 +410,7 @@ created () {
         
 ### Exercici 3:
  
-1Creeu un mètode getAccount() a `Matches` que faci un GET al backend per mirar si l'usuari, que ha iniciat sessió, és administrador o no i deseu-lo en una variable anomenada `is_admin`.
+Creeu un mètode getAccount() a `Matches` que faci un GET al backend per mirar si l'usuari, que ha iniciat sessió, és administrador o no i deseu-lo en una variable anomenada `is_admin`.
 
 Botó Create Account
 --------------
@@ -408,7 +419,7 @@ Botó Create Account
 
 Aquest botó és un formulari on l'usuari introduirà les seves dades i les enviarà. El botó Envia crida a un mètode POST on les dades es guarden a la taula de comptes.
 Abans d’enviar POST hauríem de plantejar-nos com obtenir les dades a enviar. Per obtenir aquestes dades, podem utilitzar Forms i emmagatzemar-los en un objecte.
-En el nostre formulari, hem de recopilar la informació necessària per enviar-la a Flask per POST o PUT.
+En el nostre formulari, hem de recopilar la informació necessària per enviar-la al BE per POST o PUT.
 Primer de tot, hem de crear un objecte per emmagatzemar les dades:
 
 ```javascript
@@ -436,7 +447,7 @@ Després, mitjançant el mètode onSubmit hauríem de cridar el mètode a POST. 
 2.  Creeu un mètode POST per enviar les noves dades d'usuari mitjançant path i paràmetres:
 
 ```javascript
-const path = 'http://localhost:5000/account'
+const path = 'http://localhost:8000/account'
 ```
 
 ```javascript
@@ -468,7 +479,7 @@ Per proporcionar seguretat per a les compres de cada usuari, hauríem d’utilit
 
 ```javascript
 addPurchase (parameters) {
-  const path = 'http://localhost:5000/order/${this.username}'
+  const path = 'http://localhost:8000/order/${this.username}'
   axios.post(path, parameters, {
     auth: {username: this.token}
   })
