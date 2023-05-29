@@ -1,6 +1,7 @@
+import models
 from main import app, get_db
 from fastapi.testclient import TestClient
-from backend import schemas, models
+import schemas
 from schemas import *
 
 client = TestClient(app)
