@@ -6,15 +6,22 @@
 <!--    <h4> Remaining tickets: {{ remaining_tickets }} </h4>-->
 <!--    <h4> Match price: {{ price_match }} </h4>-->
 <!--    <h4> Money available: {{ money_available }} </h4>-->
-    <div class="container">
-      <div class="row" >
+      <div class="header">
+      <div class="row borderBottom fullWidth">
         <div class="col">
-          <h1 style="text-align: start"> {{ message }} </h1>
+          <h1 style="text-align: start">{{ message }}</h1>
         </div>
         <div class="col">
-          <button class="btn btn-outline-primary" @click="veureCistella()" style="background-color: white; text-align: right;">Veure cistella</button>
-          </div>
-          <div v-if="showCart" class="container">
+          <button class="btn btn-outline-primary" @click="veureCistella()" :style="buttonStyle">
+            {{ showCart ? 'Tanca cistella' : 'Veure cistella' }}
+          </button>
+        </div>
+      </div>
+    </div>
+       <div class="body colorSecondary">
+          <div v-if="showCart">
+            <div class="colorWhite margins">
+              <span>CART</span>
             <table class="table" v-if="showCart">
               <thead>
                 <tr>
@@ -43,12 +50,12 @@
                   <td><button class="btn btn-outline-danger" @click="removeEventOfCart(match)"> Eliminar entrada </button></td>
               </tbody>
             </table>
-            <button v-if="matches_added.length > 0" class="btn btn-secondary" @click="veureCistella()"> Enrere </button>
-            <button v-if="matches_added.length > 0" class="btn btn-success" @click="finalizePurchase()"> Finalitzar la compra </button>
+            <button v-if="matches_added.length >= 0" class="btn btn-secondary" @click="veureCistella()"> Enrere </button>
+            <button v-if="matches_added.length >= 0" class="btn btn-success"  @click="finalizePurchase()" :disabled="matches_added.length <= 0"> Finalitzar la compra </button>
             <p v-else>Your cart is currently empty.</p>
+              </div>
           </div>
-        <div v-else class="container">
-              <div class="row">
+              <div v-else class="row">
                 <div class="col-lg-4 col-md-6 mb-4" v-for="(match) in matches" :key="match.id">
                   <br>
                   <div class="card" style="width: 18rem;">
@@ -65,16 +72,37 @@
                   </div>
                 </div>
               </div>
-            </div>
+
       </div>
-        </div>
   </div>
 
 </template>
-
 <style>
   .container {
     background-color: white;
+  }
+  .borderBottom{
+    border-bottom: 2px solid black;
+  }
+  .colorSecondary {
+    background-color: #bfad8a;
+  }
+  .colorWhite{
+    background-color: white;
+  }
+  .margins{
+    margin: 0px 200px 0px 200px;
+  }
+  .fullWidth {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+  }
+
+  #margTop{
+    margin-top: 10px;
   }
 </style>
 
