@@ -11,7 +11,7 @@
           class="form-control"
           placeholder="Username"
           required autofocus
-          :style="{ color: username === '' ? '#999999' : '' }"
+          :style="{ color: signInUsername === '' ? '#999999' : '' }"
         />
       </div>
       <div class="form-group">
@@ -23,7 +23,7 @@
           class="form-control"
           placeholder="Password"
           required
-          :style="{ color: password === '' ? '#999999' : '' }"
+          :style="{ color: signInPassword === '' ? '#999999' : '' }"
         />
       </div>
       <button class="btn btn-primary btn-block" @click="signIn">Sign In</button>
@@ -44,6 +44,7 @@
           :style="{ color: addUserForm.username === '' ? '#999999' : '' }"
         />
       </div>
+      <div v-if="alertMessage" class="alert-message">{{ alertMessage }}</div>
       <div class="form-group">
         <label for="create-password">Password</label>
         <input
@@ -106,6 +107,12 @@
   width: 90%;
   margin: 10px auto 0;
 }
+
+.alert-message {
+  margin-top: 0;
+  color: red;
+  margin-bottom: 16px;
+}
 </style>
 
 <script>
@@ -126,7 +133,8 @@ export default {
         username: this.createUsername,
         password: this.createPassword
       },
-      show: true
+      show: true,
+      alertMessage: null
     }
   },
   methods: {
@@ -141,6 +149,7 @@ export default {
     },
     backToMatches () {
       // Aquí puedes agregar la lógica para volver a la página de matches
+      this.$router.push({ path: '/matches' })
       console.log('Back To Matches clicked')
     },
     checkLogin () {
@@ -185,16 +194,32 @@ export default {
       console.log('Submit achieved')
       console.log(parameters)
       const path = 'http://localhost:8000/account'
-      axios.post(path, parameters)
+      // Primero, realiza una solicitud GET al backend para verificar si el usuario ya existe
+      // eslint-disable-next-line no-template-curly-in-string
+      const pathget = 'http://localhost:8000/account/' + this.createUsername
+      axios.get(pathget)
         .then(() => {
-          console.log('Account created')
-          alert(JSON.stringify(this.addUserForm))
-          this.onReset()
-          this.initCreateForm()
+          // Si la solicitud GET tiene éxito, significa que el usuario ya existe
+          // Muestra una alerta y no continúes con la creación de la cuenta
+          this.alertMessage = 'El usuario ya existe'
         })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.log(error)
+        .catch(() => {
+        // Si la solicitud GET falla, significa que el usuario no existe
+        // Puedes continuar con la creación de la cuenta enviando una solicitud POST
+          axios.post(path, parameters)
+            .then(() => {
+              console.log('Account created')
+              alert(JSON.stringify(this.addUserForm))
+              console.log('arribo al reset')
+              this.onReset()
+              this.initCreateForm()
+              console.log('arribo al push')
+              this.createAccount()
+            })
+            .catch((error) => {
+            // eslint-disable-next-line
+            console.log(error)
+            })
         })
     },
     onReset () {
@@ -207,9 +232,30 @@ export default {
         this.show = true
       })
     },
-    showForms () {
-      this.show = !this.show
+    getAccount () {
+      // Realizar solicitud GET al backend para obtener la información de la cuenta del usuario
+      // actualment no funciona
+      const path = 'http://localhost:8000/account/' + this.createUsername
+      // utilitzar de moment aquesthardcodejat
+      // const path = 'http://localhost:8000/account/Oscar'
+      const config = {
+        headers: {
+          Authorization: 'Bearer ' + this.token
+        }
+      }
+      axios.get(path, config)
+        .then((res) => {
+          // Obtener el valor de is_admin del resultado de la respuesta
+          this.is_admin = res.data.is_admin
+        })
+        .catch((error) => {
+          console.error(error)
+        })
     }
+    // ,
+    // showForms () {
+    //   this.show = !this.show
+    // }
   },
   created () {
   }

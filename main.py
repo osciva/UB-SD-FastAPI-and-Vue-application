@@ -82,9 +82,13 @@ async def get_current_user(settings: utils.Settings = Depends(get_settings),
         )
     username: str = token_data.sub
     # get user from database
+    user = db.query(models.Account).filter(models.Account.username == username).first()
     # if user does not exist, raise an exception
+    if not user:
+        raise HTTPException(status_code = 400, detail = "User doesn't exist, use Sign In to create one")
     # if user exist, return user Schema with password hashed
-    return SystemAccount(**user)
+    else:
+        return SystemAccount(**user)
 
 
 # ----------------------------------------TEAMS----------------------------------------
@@ -383,6 +387,9 @@ def create_orders_by_username(username: str, order: schemas.OrderCreate, db: Ses
 
 @app.get('/accounts', response_model=List[schemas.Account])
 def get_accounts(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+    # protegir endpoint
+    # current_user = get_current_user(settings=Depends(get_settings()), db=db, token=Depends(reuseable_oauth))
+    # if current_user.is_admin == 1:
     return repository.get_accounts(db, skip=skip, limit=limit)
 
 
