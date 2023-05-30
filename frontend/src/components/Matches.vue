@@ -149,7 +149,8 @@ export default {
     },
     addPurchase (parameters) {
       console.log('addPurchase achieved')
-      const path = 'http://localhost:8000/orders/' + this.username
+      const path = 'http://localhost:8000/orders/Oscar'
+      // const path = 'http://localhost:8000/orders/' + this.username
       axios.post(path, parameters)
         .then(() => {
           console.log('Order done')
@@ -200,7 +201,10 @@ export default {
     // 5.3
     getAccount () {
       // Realizar solicitud GET al backend para obtener la información de la cuenta del usuario
-      const path = 'http://localhost:8000/account/' + this.username
+      // actualment no funciona
+      // const path = 'http://localhost:8000/account/' + this.username
+      // utilitzar de moment aquesthardcodejat
+      const path = 'http://localhost:8000/account/Oscar'
       const config = {
         headers: {
           Authorization: 'Bearer ' + this.token
