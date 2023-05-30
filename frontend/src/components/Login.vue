@@ -1,13 +1,13 @@
 <template>
   <div class="login-container">
-    <div class="login-box">
+    <div v-if="!create_acc" class="login-box">>
       <h2 class="login-title">Sign In</h2>
       <div class="form-group">
-        <label for="username">Username</label>
+        <label for="signInUsername">Username</label>
         <input
           type="text"
-          id="username"
-          v-model="username"
+          id="signInUsername"
+          v-model="signInUsername"
           class="form-control"
           placeholder="Username"
           required autofocus
@@ -15,11 +15,11 @@
         />
       </div>
       <div class="form-group">
-        <label for="password">Password</label>
+        <label for="signInPassword">Password</label>
         <input
           type="password"
-          id="password"
-          v-model="password"
+          id="signInPassword"
+          v-model="signInPassword"
           class="form-control"
           placeholder="Password"
           required
@@ -30,6 +30,42 @@
       <button class="btn btn-success btn-block" @click="createAccount">Create Account</button>
       <button class="btn btn-secondary btn-block" @click="backToMatches">Back To Matches</button>
     </div>
+    <div v-else class="login-box">
+      <h2 class="login-title">Create Account</h2>
+      <div class="form-group">
+        <label for="create-username">Username</label>
+        <input
+          type="text"
+          id="create-username"
+          v-model="createUsername"
+          class="form-control"
+          placeholder="Username"
+          required
+          :style="{ color: addUserForm.username === '' ? '#999999' : '' }"
+        />
+      </div>
+      <div class="form-group">
+        <label for="create-password">Password</label>
+        <input
+          type="password"
+          id="create-password"
+          v-model="createPassword"
+          class="form-control"
+          placeholder="Password"
+          required
+          :style="{ color: addUserForm.password === '' ? '#999999' : '' }"
+        />
+      </div>
+      <button class="btn btn-primary btn-block" @click="submitAccount">Submit</button>
+      <button class="btn btn-secondary btn-block" @click="createAccount">Back To Login</button>
+    </div>
+<!--    Para ver lo que vas haciendo en el forms-->
+<!--    <div>-->
+<!--    <button class="btn btn-normal" @click="showForms()">show details</button>-->
+<!--      <b-card v-if="show" class="mt-3" header="Lo que has escrito:">-->
+<!--        <pre class="m-0">{{ addUserForm }}</pre>-->
+<!--      </b-card>-->
+<!--     </div>-->
   </div>
 </template>
 
@@ -78,9 +114,19 @@ export default {
   data () {
     return {
       logged: false,
-      username: null,
-      password: null,
-      token: null
+      // Propiedades para el formulario de Sign In
+      signInUsername: null,
+      signInPassword: null,
+      // Propiedades para el formulario de Create Account
+      createUsername: null,
+      createPassword: null,
+      create_acc: false,
+      token: null,
+      addUserForm: {
+        username: this.createUsername,
+        password: this.createPassword
+      },
+      show: true
     }
   },
   methods: {
@@ -89,6 +135,7 @@ export default {
       console.log('Sign In clicked')
     },
     createAccount () {
+      this.create_acc = !this.create_acc
       // Aquí puedes agregar la lógica para crear una cuenta de usuario
       console.log('Create Account clicked')
     },
@@ -115,15 +162,56 @@ export default {
           console.error(error)
           alert('Username or Password incorrect')
         })
+    }, // 5.3
+    initCreateForm () {
+      this.creatingAccount = true
+      this.addUserForm.username = null
+      this.addUserForm.password = null
+    },
+    submitAccount () {
+      this.addUserForm.username = this.createUsername
+      this.addUserForm.password = this.createPassword
+      console.log('Submit account clicked')
+      const parameters = {
+        username: this.createUsername,
+        password: this.createPassword,
+        available_money: 200.0,
+        is_admin: 1,
+        orders: []
+      }
+      this.postAccount(parameters)
+    },
+    postAccount (parameters) {
+      console.log('Submit achieved')
+      console.log(parameters)
+      const path = 'http://localhost:8000/account'
+      axios.post(path, parameters)
+        .then(() => {
+          console.log('Account created')
+          alert(JSON.stringify(this.addUserForm))
+          this.onReset()
+          this.initCreateForm()
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error)
+        })
+    },
+    onReset () {
+      // Reset our form values
+      this.createUsername = null
+      this.createPassword = null
+      // Trick to reset/clear native browser form validation state
+      this.show = false
+      this.$nextTick(() => {
+        this.show = true
+      })
+    },
+    showForms () {
+      this.show = !this.show
     }
   },
   created () {
-    this.logged = this.$route.query.logged === 'true'
-    this.username = this.$route.query.username
-    this.token = this.$route.query.token
-    if (this.logged === undefined) {
-      this.logged = false
-    }
   }
 }
 </script>

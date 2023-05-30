@@ -90,8 +90,9 @@ export default {
       price_match: 10,
       showCart: false,
       matches: [],
-      matches_added: []
-
+      matches_added: [],
+      creatingAccount: false,
+      is_admin: false
     }
   },
   methods: {
@@ -148,7 +149,7 @@ export default {
     },
     addPurchase (parameters) {
       console.log('addPurchase achieved')
-      const path = 'http://localhost:8000/orders/Oscar'
+      const path = 'http://localhost:8000/orders/' + this.username
       axios.post(path, parameters)
         .then(() => {
           console.log('Order done')
@@ -195,10 +196,35 @@ export default {
         .catch((error) => {
           console.error(error)
         })
+    },
+    // 5.3
+    getAccount () {
+      // Realizar solicitud GET al backend para obtener la información de la cuenta del usuario
+      const path = 'http://localhost:8000/account/' + this.username
+      const config = {
+        headers: {
+          Authorization: 'Bearer ' + this.token
+        }
+      }
+      axios.get(path, config)
+        .then((res) => {
+          // Obtener el valor de is_admin del resultado de la respuesta
+          this.is_admin = res.data.is_admin
+        })
+        .catch((error) => {
+          console.error(error)
+        })
     }
   },
   created () {
     this.getMatches()
+    this.logged = this.$route.query.logged === 'true'
+    this.username = this.$route.query.username
+    this.token = this.$route.query.token
+    if (this.logged === undefined) {
+      this.logged = false
+    }
+    this.getAccount()
   }
 }
 </script>
