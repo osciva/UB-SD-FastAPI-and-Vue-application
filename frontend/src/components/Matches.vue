@@ -1,20 +1,28 @@
 <template>
-  <div id="app">
+  <div id="app" class="vh-100">
 <!--    <button class="btn btn-success btn-lg" @click="buyTicket" :disabled="money_available < price_match"> Buy ticket </button>-->
 <!--    <button class="btn btn-danger btn-lg" @click="returnTicket" :disabled="tickets_bought === 0"> Return ticket </button>-->
 <!--    <h4> Total tickets bought: {{ tickets_bought }} </h4>-->
 <!--    <h4> Remaining tickets: {{ remaining_tickets }} </h4>-->
 <!--    <h4> Match price: {{ price_match }} </h4>-->
 <!--    <h4> Money available: {{ money_available }} </h4>-->
-    <div class="container">
-      <div class="row" >
+      <div class="header borderBottom">
+      <div class="row col-left">
         <div class="col">
-          <h1 style="text-align: start"> {{ message }} </h1>
+          <h1 style="text-align: start" class="size">{{ message }}</h1>
         </div>
-        <div class="col">
-          <button class="btn btn-outline-primary" @click="veureCistella()" style="background-color: white; text-align: right;">Veure cistella</button>
-          </div>
-          <div v-if="showCart" class="container">
+        <div class="col teAlign-marRigth">
+          <button class="btn btn-outline-primary" @click="veureCistella()" :style="buttonStyle">
+            {{ showCart ? 'Tanca cistella' : 'Veure cistella' }}
+          </button>
+        </div>
+      </div>
+    </div>
+       <div class="body colorSecondary min-height">
+          <div v-if="showCart" class="margins">
+            <div class="colorSecondary margin-top"></div>
+            <div class="colorWhite">
+              <span>CART</span>
             <table class="table" v-if="showCart">
               <thead>
                 <tr>
@@ -43,12 +51,12 @@
                   <td><button class="btn btn-outline-danger" @click="removeEventOfCart(match)"> Eliminar entrada </button></td>
               </tbody>
             </table>
-            <button v-if="matches_added.length > 0" class="btn btn-secondary" @click="veureCistella()"> Enrere </button>
-            <button v-if="matches_added.length > 0" class="btn btn-success" @click="finalizePurchase()"> Finalitzar la compra </button>
+            <button v-if="matches_added.length >= 0" class="btn btn-secondary" @click="veureCistella()"> Enrere </button>
+            <button v-if="matches_added.length >= 0" class="btn btn-success"  @click="finalizePurchase()" :disabled="matches_added.length <= 0"> Finalitzar la compra </button>
             <p v-else>Your cart is currently empty.</p>
+            </div>
           </div>
-        <div v-else class="container">
-              <div class="row">
+              <div v-else class="row card-container">
                 <div class="col-lg-4 col-md-6 mb-4" v-for="(match) in matches" :key="match.id">
                   <br>
                   <div class="card" style="width: 18rem;">
@@ -65,16 +73,52 @@
                   </div>
                 </div>
               </div>
-            </div>
+
       </div>
-        </div>
   </div>
 
 </template>
-
 <style>
   .container {
     background-color: white;
+  }
+  h1.size{
+    font-size: 50px;
+    color: black;
+    font-family: inherit;
+  }
+  .borderBottom{
+    border-bottom: 2px solid black;
+  }
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-left: 125px; /* Ajusta el margen izquierdo según tus necesidades */
+  }
+  .min-height{
+    min-height: 599px;
+  }
+  .colorSecondary {
+    background-color: #ede1d6d4;
+  }
+  .colorWhite{
+    background-color: white;
+  }
+  .margins{
+    margin: 0px 200px 0px 200px;
+  }
+  .margin-top {
+    height: 50px; /* Altura del margen superior */
+  }
+  .col-left {
+    margin-left: 145px; /* Margen izquierdo */
+    margin-bottom: 25px;
+    margin-top: 12px;
+  }
+  .teAlign-marRigth{
+    text-align: right;
+    margin-right: 160px;
   }
 </style>
 
@@ -83,7 +127,7 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      message: 'Sport Matches',
+      message: 'Sport matches ',
       tickets_bought: 0,
       remaining_tickets: 15,
       money_available: 100,
