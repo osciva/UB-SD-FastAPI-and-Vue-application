@@ -144,7 +144,7 @@ def update_team_by_name(team_name: str, team: schemas.TeamCreate, db: Session = 
 
 
 # retorna tots els partits d'un equip, donat el seu nom.
-@app.get("/teams/{team_name}/matches", response_model=schemas.Team)
+@app.get("/teams/{team_name}/matches", response_model=List[schemas.Match])
 def get_matches_team(team_name: str, db: Session = Depends(get_db)):
     team = repository.get_team_by_name(db, name=team_name)
     if not team:
@@ -218,7 +218,7 @@ def delete_competition(competition_name: str, db: Session = Depends(get_db)):
 
 
 # retorna tots els partits d'una competició, donada el seu nom.
-@app.get("/competitions/{competition_name}/matches", response_model=schemas.Competition)
+@app.get("/competitions/{competition_name}/matches", response_model=List[schemas.Competition])
 def get_matches_competition(competition_name: str, db: Session = Depends(get_db)):
     competition = repository.get_competition_by_name(db, name=competition_name)
     if not competition:
@@ -228,7 +228,7 @@ def get_matches_competition(competition_name: str, db: Session = Depends(get_db)
 
 
 # retorna tots els equips d'una competició, donada el seu nom.
-@app.get("/competitions/{competition_name}/teams", response_model=schemas.Competition)
+@app.get("/competitions/{competition_name}/teams", response_model=List[schemas.Competition])
 def get_teams_competition(competition_name: str, db: Session = Depends(get_db)):
     competition = repository.get_competition_by_name(db, name=competition_name)
     if not competition:
@@ -317,7 +317,7 @@ def update_match(match_id: int, match: schemas.MatchCreate, db: Session = Depend
 
 
 # retorna l'equip local i visitant d'un partit, donat el seu id.
-@app.get("/matches/{match_id}/teams", response_model=schemas.Match)
+@app.get("/matches/{match_id}/teams", response_model=List[schemas.Match])
 def get_teams_match(match_id: int, db: Session = Depends(get_db)):
     db_match = repository.get_match(db=db, match_id=match_id)
     if not db_match:
@@ -327,7 +327,7 @@ def get_teams_match(match_id: int, db: Session = Depends(get_db)):
 
 
 # retorna la competició d'un partit, donat el seu id.
-@app.get("/matches/{match_id}/competition", response_model=schemas.Match)
+@app.get("/matches/{match_id}/competition", response_model=schemas.Competition)
 def get_competition_match(match_id: int, db: Session = Depends(get_db)):
     db_match = repository.get_match(db=db, match_id=match_id)
     if not db_match:
@@ -430,13 +430,15 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
         raise HTTPException(status_code=404, detail="User not found")
     # if user exist, verify password using verify_password function
     else:
-        pwd = verify_password(password=password, hashed_pass=get_hashed_password(password))
+        pwd = verify_password(password, user.password)
+        # pwd = verify_password(password, get_hashed_password(password))
+
         # if password is not correct, raise an exception
         if not pwd:
             raise HTTPException(status_code=404, detail="Incorrect Password")
 
         # if password is correct, create access and refresh tokens and return them
-        if pwd:
+        else:
             return {
                 "access_token": create_access_token(user.username),
                 "refresh_token": create_refresh_token(user.username),

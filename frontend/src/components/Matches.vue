@@ -150,7 +150,14 @@ export default {
     addPurchase (parameters) {
       console.log('addPurchase achieved')
       const path = 'http://localhost:8000/orders/Oscar'
+      // 5.5 seguretat (no va)
       // const path = 'http://localhost:8000/orders/' + this.username
+      // const config = {
+      //   headers: {
+      //     Authorization: 'Bearer ' + this.token
+      //   }
+      // }
+      // axios.post(path, parameters, config)
       axios.post(path, parameters)
         .then(() => {
           console.log('Order done')

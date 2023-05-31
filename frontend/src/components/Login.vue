@@ -3,27 +3,27 @@
     <div v-if="!create_acc" class="login-box">>
       <h2 class="login-title">Sign In</h2>
       <div class="form-group">
-        <label for="signInUsername">Username</label>
+        <label for="username">Username</label>
         <input
           type="text"
-          id="signInUsername"
-          v-model="signInUsername"
+          id="username"
+          v-model="username"
           class="form-control"
           placeholder="Username"
           required autofocus
-          :style="{ color: signInUsername === '' ? '#999999' : '' }"
+          :style="{ color: username === '' ? '#999999' : '' }"
         />
       </div>
       <div class="form-group">
-        <label for="signInPassword">Password</label>
+        <label for="password">Password</label>
         <input
           type="password"
-          id="signInPassword"
-          v-model="signInPassword"
+          id="password"
+          v-model="password"
           class="form-control"
           placeholder="Password"
           required
-          :style="{ color: signInPassword === '' ? '#999999' : '' }"
+          :style="{ color: password === '' ? '#999999' : '' }"
         />
       </div>
       <button class="btn btn-primary btn-block" @click="signIn">Sign In</button>
@@ -57,6 +57,7 @@
           :style="{ color: addUserForm.password === '' ? '#999999' : '' }"
         />
       </div>
+      <div v-if="alertMessagePwd" class="alert-message">{{ alertMessagePwd }}</div>
       <button class="btn btn-primary btn-block" @click="submitAccount">Submit</button>
       <button class="btn btn-secondary btn-block" @click="createAccount">Back To Login</button>
     </div>
@@ -122,8 +123,8 @@ export default {
     return {
       logged: false,
       // Propiedades para el formulario de Sign In
-      signInUsername: null,
-      signInPassword: null,
+      username: null,
+      password: null,
       // Propiedades para el formulario de Create Account
       createUsername: null,
       createPassword: null,
@@ -134,13 +135,15 @@ export default {
         password: this.createPassword
       },
       show: true,
-      alertMessage: null
+      alertMessage: null,
+      alertMessagePwd: null
     }
   },
   methods: {
     signIn () {
       // Aquí puedes agregar la lógica para autenticar al usuario
       console.log('Sign In clicked')
+      this.checkLogin()
     },
     createAccount () {
       this.create_acc = !this.create_acc
@@ -164,7 +167,9 @@ export default {
         .then((res) => {
           this.logged = true
           this.token = res.data.token
-          this.$router.push({ path: '/', query: { logged: this.logged.toString(), username: this.username, token: this.token } })
+          this.$router.push({ path: '/', query: { username: this.username, logged: this.logged.toString(), token: this.token } })
+          // this.token = res.data.access_token
+          // this.$router.push({ path: '/', query: { username: this.username, logged: this.logged.toString(), token: this.access_token } })
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -178,6 +183,9 @@ export default {
       this.addUserForm.password = null
     },
     submitAccount () {
+      // Restablecer mensajes de error
+      this.alertMessage = null
+      this.alertMessagePwd = null
       this.addUserForm.username = this.createUsername
       this.addUserForm.password = this.createPassword
       console.log('Submit account clicked')
@@ -194,34 +202,55 @@ export default {
       console.log('Submit achieved')
       console.log(parameters)
       const path = 'http://localhost:8000/account'
-      // Primero, realiza una solicitud GET al backend para verificar si el usuario ya existe
-      // eslint-disable-next-line no-template-curly-in-string
-      const pathget = 'http://localhost:8000/account/' + this.createUsername
-      axios.get(pathget)
+      axios.post(path, parameters)
         .then(() => {
-          // Si la solicitud GET tiene éxito, significa que el usuario ya existe
-          // Muestra una alerta y no continúes con la creación de la cuenta
-          this.alertMessage = 'El usuario ya existe'
+          console.log('Account created')
+          alert('Account Created Successfully ')
+          this.onReset()
+          this.initCreateForm()
         })
-        .catch(() => {
-        // Si la solicitud GET falla, significa que el usuario no existe
-        // Puedes continuar con la creación de la cuenta enviando una solicitud POST
-          axios.post(path, parameters)
-            .then(() => {
-              console.log('Account created')
-              alert(JSON.stringify(this.addUserForm))
-              console.log('arribo al reset')
-              this.onReset()
-              this.initCreateForm()
-              console.log('arribo al push')
-              this.createAccount()
-            })
-            .catch((error) => {
-            // eslint-disable-next-line
-            console.log(error)
-            })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error)
+          if (parameters.password.length > 24 || parameters.password.length < 8) {
+            this.alertMessagePwd = 'La contraseña tiene que tener entre 8 i 24 caracteres'
+          } else {
+            this.alertMessage = 'El usuario ya existe'
+          }
         })
     },
+    // postAccount (parameters) {
+    //   console.log('Submit achieved')
+    //   console.log(parameters)
+    //   const path = 'http://localhost:8000/account'
+    //   // Primero, realiza una solicitud GET al backend para verificar si el usuario ya existe
+    //   // eslint-disable-next-line no-template-curly-in-string
+    //   const pathget = 'http://localhost:8000/account/' + this.createUsername
+    //   axios.get(pathget)
+    //     .then(() => {
+    //       // Si la solicitud GET tiene éxito, significa que el usuario ya existe
+    //       // Muestra una alerta y no continúes con la creación de la cuenta
+    //       this.alertMessage = 'El usuario ya existe'
+    //     })
+    //     .catch(() => {
+    //     // Si la solicitud GET falla, significa que el usuario no existe
+    //     // Puedes continuar con la creación de la cuenta enviando una solicitud POST
+    //       axios.post(path, parameters)
+    //         .then(() => {
+    //           console.log('Account created')
+    //           alert(JSON.stringify(this.addUserForm))
+    //           console.log('arribo al reset')
+    //           this.onReset()
+    //           this.initCreateForm()
+    //           console.log('arribo al push')
+    //           this.createAccount()
+    //         })
+    //         .catch((error) => {
+    //         // eslint-disable-next-line
+    //         console.log(error)
+    //         })
+    //     })
+    // },
     onReset () {
       // Reset our form values
       this.createUsername = null
@@ -231,6 +260,7 @@ export default {
       this.$nextTick(() => {
         this.show = true
       })
+      this.create_acc = !this.create_acc
     },
     getAccount () {
       // Realizar solicitud GET al backend para obtener la información de la cuenta del usuario
