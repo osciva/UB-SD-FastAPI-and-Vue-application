@@ -12,9 +12,16 @@
           <h1 style="text-align: start" class="size">{{ message }}</h1>
         </div>
         <div class="col teAlign-marRigth">
-          <button class="btn btn-outline-primary" @click="veureCistella()" :style="buttonStyle">
-            {{ showCart ? 'Tanca cistella' : 'Veure cistella' }}
-          </button>
+          <div class="icon-button-container">
+            <img src="../assets/person-icon.png" alt="Person Icon" width="24" height="24" style="margin-right: 2px;" class="mb-1">
+            <span class="spanText" style="margin-right: 13px;">Oscar</span>
+            <img src="../assets/money-icon.png" alt="Money Icon" width="24" height="24" style="margin-right: 2px;">
+            <span class="spanText" style="margin-right: 13px;">200$</span>
+            <button class="btn btn-outline-primary" @click="veureCistella()" :style="buttonStyle" style="margin-right: 13px;">
+              {{ showCart ? 'Tanca cistella' : 'Veure cistella' }}
+            </button>
+            <button class="btn button-secondary" @click="goLogin()">Log Out</button>
+          </div>
         </div>
       </div>
     </div>
@@ -78,6 +85,9 @@
   </div>
 
 </template>
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
 <style>
   .container {
     background-color: white;
@@ -116,9 +126,25 @@
     margin-bottom: 25px;
     margin-top: 12px;
   }
+  .button-secondary{
+    color: #28a745;
+      background-color: #fff;
+      border-color: #28a745;
+  }
   .teAlign-marRigth{
     text-align: right;
     margin-right: 160px;
+  }
+  .spanText{
+    font-weight: bold;
+    font-family: cursive;
+    font-size: 16px;
+  }
+  .icon-button-container {
+    display: flex;
+    align-items: center; /* Alinear verticalmente los elementos */
+    margin-right: 50px;
+    justify-content: flex-end;
   }
 </style>
 
@@ -128,6 +154,7 @@ export default {
   data () {
     return {
       message: 'Sport matches ',
+      user: this.username,
       tickets_bought: 0,
       remaining_tickets: 15,
       money_available: 100,
@@ -147,8 +174,13 @@ export default {
         this.money_available -= this.price_match
       }
     },
+    goLogin () {
+      window.location.href = 'http://127.0.0.1:8000';
+    },
     veureCistella () {
       this.showCart = !this.showCart
+      console.log("AAAAEEEEEE");
+      console.log(this.username);
       this.getMatches()
     },
     returnTicket () {
@@ -275,6 +307,10 @@ export default {
     this.getMatches()
     this.logged = this.$route.query.logged === 'true'
     this.username = this.$route.query.username
+    console.log("PEPEPEPPEPE")
+    console.log(this.$route)
+    console.log(this.$route.query)
+    console.log(this.$route.query.username)
     this.token = this.$route.query.token
     if (this.logged === undefined) {
       this.logged = false
