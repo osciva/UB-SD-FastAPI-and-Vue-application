@@ -165,6 +165,7 @@ export default {
       const path = 'http://localhost:8000/login'
       axios.post(path, parameters, config)
         .then((res) => {
+          console.log(parameters)
           this.logged = true
           this.token = res.data.token
           this.$router.push({ path: '/matches', query: { username: this.username, logged: this.logged.toString(), token: this.token } })

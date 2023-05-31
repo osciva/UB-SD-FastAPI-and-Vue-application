@@ -386,7 +386,7 @@ def create_orders_by_username(username: str, order: schemas.OrderCreate, db: Ses
 
 
 @app.get('/accounts', response_model=List[schemas.Account])
-def get_accounts(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+def get_accounts(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     # protegir endpoint
     # current_user = get_current_user(settings=Depends(get_settings()), db=db, token=Depends(reuseable_oauth))
     # if current_user.is_admin == 1:
@@ -424,7 +424,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
     username = form_data.username
     password = form_data.password
     # get user from database
-    user = repository.get_account_by_username(db=db,username=username)
+    user = repository.get_account_by_username(db, username)
     # if user does not exist, raise an exception
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -435,7 +435,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
 
         # if password is not correct, raise an exception
         if not pwd:
-            raise HTTPException(status_code=404, detail="Incorrect Password")
+            raise HTTPException(status_code=400, detail="Incorrect Password")
 
         # if password is correct, create access and refresh tokens and return them
         else:
