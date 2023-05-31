@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 import models, schemas
 from models import Competition, Match, Team, Order, Account
 from schemas import CompetitionCreate, MatchCreate, TeamCreate
-from sqlalchemy import select
+from sqlalchemy import select, or_
 
 from utils import get_hashed_password
 
@@ -16,8 +16,13 @@ def get_team(db: Session, team_id: int):
 
 
 def get_team_by_name(db: Session, name: str):
-    print("Dintre de team by name")
+    print("Dins de team by name")
     return db.query(models.Team).filter(models.Team.name == name).first()
+
+
+def get_team_by_id(db: Session, id: int):
+    print("Dins de team by id")
+    return db.query(models.Team).filter(models.Team.id == id).first()
 
 
 def get_teams(db: Session, skip: int = 0, limit: int = 1000):
@@ -57,16 +62,26 @@ def get_matches_team(db: Session, team_name: str):
     team = get_team_by_name(db, team_name)
     if not team:
         return None
-    matches = get_matches(team)
-    return matches
+    team_id = team.id
+    return db.query(models.Match).filter(
+        or_(
+            models.Match.local_id == team_id,
+            models.Match.visitor == team_id
+        )
+    ).all()
 
 
 def get_competitions_team(db: Session, team_name: str):
     team = get_team_by_name(db, team_name)
     if not team:
         return None
-    competitions = get_competitions(team)
-    return competitions
+    team_id = team.id
+    compes = []
+    competitions = get_competitions(db, 0, 100)
+    for comp in competitions:
+        if any(team.id == t.id for t in comp.teams):
+            compes.append(comp)
+    return compes
 
 
 # ----------------------------------------COMPETITIONS----------------------------------------
@@ -78,6 +93,11 @@ def get_competition(db: Session, competition_id: int):
 def get_competition_by_name(db: Session, name: str):
     print("Dintre de competition by name")
     return db.query(Competition).filter(Competition.name == name).first()
+
+
+def get_competition_by_id(db: Session, id: int):
+    print("Dintre de competition by name")
+    return db.query(Competition).filter(Competition.id == id).first()
 
 
 def get_competitions(db: Session, skip: int = 0, limit: int = 100):
@@ -274,9 +294,9 @@ def get_teams_match(db: Session, match_id: int):
     if not db_match:
         raise HTTPException(status_code=404, detail="Match not found")
     local_id = db_match.local_id
-    visitor_id = db_match.local_id
-    local = get_team(db, local_id)
-    visitor = get_team(db, visitor_id)
+    visitor_id = db_match.visitor_id
+    local = get_team_by_id(db, local_id)
+    visitor = get_team_by_id(db, visitor_id)
     teams = [local, visitor]
     return teams
 
@@ -286,7 +306,7 @@ def get_competition_match(db: Session, match_id: int):
     if not db_match:
         raise HTTPException(status_code=404, detail="Match not found")
     competition_id = db_match.competition_id
-    competition = get_competition(db, competition_id)
+    competition = get_competition_by_id(db, competition_id)
     return competition
 
 
