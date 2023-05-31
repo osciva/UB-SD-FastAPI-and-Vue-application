@@ -127,7 +127,7 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      message: 'Sport matches',
+      message: 'Sport matches ',
       tickets_bought: 0,
       remaining_tickets: 15,
       money_available: 100,
