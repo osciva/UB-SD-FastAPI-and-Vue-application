@@ -422,23 +422,34 @@ def update_account(username: str, acc: schemas.Account, db: Session = Depends(ge
 @app.post('/login', summary="Create access and refresh tokens for user", response_model=schemas.TokenSchema)
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     username = form_data.username
+    print("Dintre login mayn.py")
+    print(username)
     password = form_data.password
     # get user from database
     user = repository.get_account_by_username(db, username)
+    print(password, user)
     # if user does not exist, raise an exception
     if not user:
+        print("not user")
         raise HTTPException(status_code=404, detail="User not found")
     # if user exist, verify password using verify_password function
     else:
+        print("yes user")
         pwd = verify_password(password, user.password)
+        print(pwd)
+
         # pwd = verify_password(password, get_hashed_password(password))
 
         # if password is not correct, raise an exception
         if not pwd:
+            print("not pwd")
+
             raise HTTPException(status_code=400, detail="Incorrect Password")
 
         # if password is correct, create access and refresh tokens and return them
         else:
+            print("Dintre else")
+
             return {
                 "access_token": create_access_token(user.username),
                 "refresh_token": create_refresh_token(user.username),

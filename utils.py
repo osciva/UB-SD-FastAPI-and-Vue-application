@@ -3,6 +3,7 @@ from pydantic import BaseSettings
 from datetime import datetime, timedelta
 from typing import Union, Any
 from jose import jwt
+import bcrypt
 
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -13,9 +14,10 @@ def get_hashed_password(password: str) -> str:
     return password_context.hash(password)
 
 
-def verify_password(password: str, hashed_pass: str) -> bool:
-    return password_context.verify(password, hashed_pass)
-
+#def verify_password(password: str, hashed_pass: str) -> bool:
+    #return password_context.verify(password, hashed_pass)
+def verify_password(plain_password, hashed_password):
+    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 
 
