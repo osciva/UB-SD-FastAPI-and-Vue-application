@@ -14,9 +14,13 @@
         <div class="col teAlign-marRigth">
           <div class="icon-button-container">
             <img src="../assets/person-icon.png" alt="Person Icon" width="24" height="24" style="margin-right: 2px;" class="mb-1">
-            <span class="spanText" style="margin-right: 13px;">Oscar</span>
+            <span class="spanText" style="margin-right: 13px;">
+              {{  this.$route.query.username === undefined ? 'test' : this.$route.query.username }}
+            </span>
             <img src="../assets/money-icon.png" alt="Money Icon" width="24" height="24" style="margin-right: 2px;">
-            <span class="spanText" style="margin-right: 13px;">200$</span>
+            <span class="spanText" style="margin-right: 13px;">
+              {{this.$route.query.username === undefined ? '50.75$' : '200$'}}
+            </span>
             <button class="btn btn-outline-primary" @click="veureCistella()" :style="buttonStyle" style="margin-right: 13px;">
               {{ showCart ? 'Tanca cistella' : 'Veure cistella' }}
             </button>

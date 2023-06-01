@@ -156,20 +156,38 @@ export default {
       console.log('Back To Matches clicked')
     },
     checkLogin () {
-      const parameters = 'username=' + this.username + '&password=' + this.password
+      //const parameters = 'username=' + this.username + '&password=' + this.password
+      const formData = new FormData();
+      formData.append('username', this.username);
+      formData.append('password', this.password);
+      const parameters = 'username=' + encodeURIComponent(this.username) + '&password=' + encodeURIComponent(this.password);
+
+
+      /*const parameters = {
+        username: this.username,
+        password: this.password
+      };*/
+      console.log("Dintre CheckLogin")
+      console.log(this.username)
       const config = {
         headers: {
+          //'Content-Type': 'application/json'
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       }
       const path = 'http://localhost:8000/login'
+      console.log("Checklogin comprobaciones:")
+      console.log(path)
+      console.log(parameters)
+      console.log(config)
       axios.post(path, parameters, config)
         .then((res) => {
           console.log(parameters)
+          console.log("Dentro del .then")
           this.logged = true
           this.token = res.data.token
           this.$router.push({ path: '/matches', query: { username: this.username, logged: this.logged.toString(), token: this.token } })
-          // this.token = res.data.access_token
+          //this.token = res.data.access_token
           // this.$router.push({ path: '/', query: { username: this.username, logged: this.logged.toString(), token: this.access_token } })
         })
         .catch((error) => {
@@ -203,12 +221,17 @@ export default {
       console.log('Submit achieved')
       console.log(parameters)
       const path = 'http://localhost:8000/account'
+      console.log("PostACCOUNT:")
+      console.log(path)
+      console.log(parameters)
       axios.post(path, parameters)
         .then(() => {
           console.log('Account created')
           alert('Account Created Successfully ')
           this.onReset()
           this.initCreateForm()
+          this.$router.push({ path: '/matches', query: { username: parameters.username, logged: this.logged.toString(), token: this.token } })
+
         })
         .catch((error) => {
           // eslint-disable-next-line
