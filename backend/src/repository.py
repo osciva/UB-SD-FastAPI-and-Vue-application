@@ -2,8 +2,8 @@ from fastapi import HTTPException
 from numpy import select
 from sqlalchemy.orm import Session
 import models, schemas
-from models import Competition, Match, Team, Order, Account
-from schemas import CompetitionCreate, MatchCreate, TeamCreate
+from models import Competition, Match, Order, Account
+from schemas import MatchCreate, TeamCreate
 from sqlalchemy import select, or_
 
 from utils import get_hashed_password

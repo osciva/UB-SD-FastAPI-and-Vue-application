@@ -1,9 +1,8 @@
-from fastapi import Depends, FastAPI, HTTPException
+from functools import lru_cache
+
 from sqlalchemy.orm import Session
-from sqlalchemy.sql.functions import user
 
 import repository, models, schemas, utils
-from schemas import SystemAccount
 from database import SessionLocal, engine
 from typing import List
 from fastapi import FastAPI
@@ -11,8 +10,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Request
 from fastapi.templating import Jinja2Templates
-from fastapi.security import OAuth2PasswordRequestForm
-from fastapi.responses import RedirectResponse
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from utils import verify_password, create_access_token, create_refresh_token, get_hashed_password
 
 # sessio5 imports
@@ -26,13 +24,12 @@ from pydantic import ValidationError
 
 from dependencies import get_settings, reuseable_oauth
 from schemas import TokenPayload, SystemAccount
-from fastapi.security import OAuth2PasswordBearer
 
-app = FastAPI()
+"""app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:8080"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -42,7 +39,35 @@ app.mount("/static", StaticFiles(directory="frontend/dist/static"), name="static
 
 templates = Jinja2Templates(directory="frontend/dist")
 
-models.Base.metadata.create_all(bind=engine)  # Creem la base de dades amb els models que hem definit a SQLAlchemy
+models.Base.metadata.create_all(bind=engine)"""  # Creem la base de dades amb els models que hem definit a SQLAlchemy"
+app = FastAPI()
+
+#Activating CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:8080/"],
+    allow_credentials=True,
+    allow_methods=[""],
+    allow_headers=[""],
+)
+
+
+@lru_cache()
+def get_settings():
+    return utils.Settings()
+
+if get_settings().production:
+    print("production")
+    templates = None
+else:
+    app.mount("/static", StaticFiles(directory="../frontend/dist/static"), name="static")
+
+    templates = Jinja2Templates(directory="../frontend/dist")
+
+reuseable_oauth = OAuth2PasswordBearer(
+    tokenUrl="/login",
+    scheme_name="JWT"
+)
 
 
 # Dependency to get a DB session

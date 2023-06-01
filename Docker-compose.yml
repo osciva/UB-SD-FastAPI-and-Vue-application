@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+
+  backend:
+    build: ./backend
+    ports:
+      - 8000:8000
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/appdb
+    volumes:
+      - /backend
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    depends_on:
+      - db
+    networks:
+        - app-network
+
+  frontend:
+    build: ./frontend
+    volumes:
+      - './frontend:/app'
+      - '/app/node_modules'
+    ports:
+      - 8080:8080
+    networks:
+        - app-network
+
+
+  db:
+    image: postgres:15.1
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=appdb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    networks:
+        - app-network
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:

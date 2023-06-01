@@ -105,13 +105,14 @@ networks:
 
 ### Dockerfile per al servei de backend
 En el subdirectori del backend poseu el següent fitxer Dockerfile
+
 ```dockerfile
 FROM python:3.11-buster
 RUN mkdir app
 WORKDIR /app
 ENV PATH="${PATH}:/root/.local/bin"
 ENV PYTHONPATH=.
-COPY requirements.txt .
+COPY backend/requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 

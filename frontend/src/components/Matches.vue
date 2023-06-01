@@ -63,6 +63,7 @@
                   <td>{{match.price}}</td>
                   <td>{{(match.price * match.ticketCount).toFixed(2)}}</td>
                   <td><button class="btn btn-outline-danger" @click="removeEventOfCart(match)"> Eliminar entrada </button></td>
+               </tr>
               </tbody>
             </table>
             <button v-if="matches_added.length >= 0" class="btn btn-secondary" @click="veureCistella()"> Enrere </button>
@@ -171,13 +172,13 @@ export default {
       matches_added: [],
       creatingAccount: false,
       is_admin: false,
-      totalTickets: 0,
+      totalTickets: 0
     }
   },
   computed: {
-  totalTickets() {
-    return this.matches_added.reduce((total, match) => total + match.ticketCount, 0);
-  },
+    totalTicketsDuplicate () {
+      return this.matches_added.reduce((total, match) => total + match.ticketCount, 0)
+    }
   },
   methods: {
     buyTicket () {
@@ -206,26 +207,26 @@ export default {
       if (match.total_available_tickets > 0 && match.ticketCount > 0) {
         match.total_available_tickets += 1
         match.ticketCount -= 1
-        this.totalTickets -= 1;
+        this.totalTicketsDuplicate -= 1
       }
     },
     increaseTickets (match) {
       match.total_available_tickets -= 1
       match.ticketCount += 1
-      this.totalTickets += 1;
+      this.totalTicketsDuplicate += 1
     },
     addEventToCart (match) {
       const existingMatch = this.matches_added.find((addedMatch) => addedMatch.id === match.id)
       if (!existingMatch) {
         match.ticketCount = 1
-        this.totalTickets += 1;
+        this.totalTicketsDuplicate += 1
         this.matches_added.push(match)
       }
     },
     removeEventOfCart (match) {
       const index = this.matches_added.indexOf(match)
       if (index !== -1) {
-        this.totalTickets -= match.ticketCount;
+        this.totalTicketsDuplicate -= match.ticketCount
         this.matches_added.splice(index, 1)
       }
     },

@@ -248,15 +248,16 @@ Escriviu aquest codi dins d'un fitxer anomenat `test_main.py`:
 ```python
 from fastapi.testclient import TestClient
 
-from main import app
+from backend.src.main import app
 
 client = TestClient(app)
+
 
 def test_read_main():
     response = client.get("/")
     assert response.status_code == 200
     assert response.json() == {"message": "Hello World"}
-    
+
 ```
 Ara per executar pytest simplement heu d'executar el següent comandament:
 

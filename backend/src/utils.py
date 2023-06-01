@@ -7,7 +7,6 @@ import bcrypt
 
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-production: bool
 
 
 def get_hashed_password(password: str) -> str:
@@ -24,6 +23,7 @@ def verify_password(plain_password, hashed_password):
 class Settings(BaseSettings):
     access_token_expire_minutes: int = 30  # 30 minutes
     refresh_token_expire_minutes: int = 60 * 24 * 7  # 7 days
+    production: bool
     algorithm: str = "HS256"
     jwt_secret_key: str  # should be kept secret
     jwt_refresh_secret_key: str  # should be kept secret
