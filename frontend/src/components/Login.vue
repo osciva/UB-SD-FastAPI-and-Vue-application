@@ -152,15 +152,15 @@ export default {
     },
     backToMatches () {
       // Aquí puedes agregar la lógica para volver a la página de matches
-      this.$router.push({ path: '/matches' })
+      this.$router.push({ path: '/' })
       console.log('Back To Matches clicked')
     },
     checkLogin () {
       //const parameters = 'username=' + this.username + '&password=' + this.password
-      const formData = new FormData();
-      formData.append('username', this.username);
-      formData.append('password', this.password);
-      const parameters = 'username=' + encodeURIComponent(this.username) + '&password=' + encodeURIComponent(this.password);
+      const formData = new FormData()
+      formData.append('username', this.username)
+      formData.append('password', this.password)
+      const parameters = 'username=' + encodeURIComponent(this.username) + '&password=' + encodeURIComponent(this.password)
 
 
       /*const parameters = {
@@ -186,7 +186,7 @@ export default {
           console.log("Dentro del .then")
           this.logged = true
           this.token = res.data.token
-          this.$router.push({ path: '/matches', query: { username: this.username, logged: this.logged.toString(), token: this.token } })
+          this.$router.push({ path: '/', query: { username: this.username, logged: this.logged.toString(), token: this.token } })
           //this.token = res.data.access_token
           // this.$router.push({ path: '/', query: { username: this.username, logged: this.logged.toString(), token: this.access_token } })
         })
@@ -230,7 +230,7 @@ export default {
           alert('Account Created Successfully ')
           this.onReset()
           this.initCreateForm()
-          this.$router.push({ path: '/matches', query: { username: parameters.username, logged: this.logged.toString(), token: this.token } })
+          this.$router.push({ path: '/', query: { username: parameters.username, logged: this.logged.toString(), token: this.token } })
 
         })
         .catch((error) => {
