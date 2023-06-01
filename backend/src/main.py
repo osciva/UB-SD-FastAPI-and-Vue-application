@@ -25,21 +25,6 @@ from pydantic import ValidationError
 from dependencies import get_settings, reuseable_oauth
 from schemas import TokenPayload, SystemAccount
 
-"""app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:8080"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-app.mount("/static", StaticFiles(directory="frontend/dist/static"), name="static")
-
-templates = Jinja2Templates(directory="frontend/dist")
-
-models.Base.metadata.create_all(bind=engine)"""  # Creem la base de dades amb els models que hem definit a SQLAlchemy"
 app = FastAPI()
 
 #Activating CORS
