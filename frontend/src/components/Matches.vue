@@ -23,8 +23,11 @@
             </span>
             <button class="btn btn-outline-primary" @click="veureCistella()" :style="buttonStyle" style="margin-right: 13px;">
               {{ showCart ? 'Tanca cistella' : 'Veure cistella' }}
+              <span style="margin-left: 5px;">({{ totalTickets }})</span>
             </button>
-            <button class="btn button-secondary" @click="goLogin()">Log Out</button>
+            <button class="btn button-secondary" @click="goLogin()">
+              {{this.$route.query.username === undefined ? 'Log In' : 'Log Out'}}
+            </button>
           </div>
         </div>
       </div>
@@ -167,8 +170,14 @@ export default {
       matches: [],
       matches_added: [],
       creatingAccount: false,
-      is_admin: false
+      is_admin: false,
+      totalTickets: 0,
     }
+  },
+  computed: {
+  totalTickets() {
+    return this.matches_added.reduce((total, match) => total + match.ticketCount, 0);
+  },
   },
   methods: {
     buyTicket () {
@@ -179,12 +188,11 @@ export default {
       }
     },
     goLogin () {
-      window.location.href = 'http://127.0.0.1:8000';
+      this.$router.push('/userlogin')
     },
     veureCistella () {
       this.showCart = !this.showCart
-      console.log("AAAAEEEEEE");
-      console.log(this.username);
+      console.log(this.username)
       this.getMatches()
     },
     returnTicket () {
@@ -198,22 +206,26 @@ export default {
       if (match.total_available_tickets > 0 && match.ticketCount > 0) {
         match.total_available_tickets += 1
         match.ticketCount -= 1
+        this.totalTickets -= 1;
       }
     },
     increaseTickets (match) {
       match.total_available_tickets -= 1
       match.ticketCount += 1
+      this.totalTickets += 1;
     },
     addEventToCart (match) {
       const existingMatch = this.matches_added.find((addedMatch) => addedMatch.id === match.id)
       if (!existingMatch) {
         match.ticketCount = 1
+        this.totalTickets += 1;
         this.matches_added.push(match)
       }
     },
     removeEventOfCart (match) {
       const index = this.matches_added.indexOf(match)
       if (index !== -1) {
+        this.totalTickets -= match.ticketCount;
         this.matches_added.splice(index, 1)
       }
     },
@@ -311,7 +323,6 @@ export default {
     this.getMatches()
     this.logged = this.$route.query.logged === 'true'
     this.username = this.$route.query.username
-    console.log("PEPEPEPPEPE")
     console.log(this.$route)
     console.log(this.$route.query)
     console.log(this.$route.query.username)
