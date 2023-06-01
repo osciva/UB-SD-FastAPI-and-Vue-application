@@ -64,6 +64,8 @@ Protecció dels endpoints: Degut a que no es pot fer login amb una account no es
 Sessió de Test: Tot i que vam venir a la sessió de test vam ser incapaços de provar amb altra gent a causa de múltiples errors que ens donava en el que aquell moment havíem fet de deployment. La part positiva és que vam poder provar la web del grup del costat i vam veure com havia de ser la funcionalitat i ens vam adonar que el nostre disseny fet en aquell moment era una mica pobre.
 
 
+## Aplicacio final amb el dcoker:
+![image](https://github.com/SoftwareDistribuitUB-2023/practica-2-a09/assets/72189801/2f25e1a3-95ab-4448-b04a-290a196e21b3)
 
 
 Enviament dels Exercicis
