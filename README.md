@@ -1,33 +1,70 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/iVhjdzUt)
 [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-718a45dd9cf7e7f842a935f5ebbe5719a5e09af4491e668f4dbf3b35d5cca122.svg)](https://classroom.github.com/online_ide?assignment_repo_id=10840769&assignment_repo_type=AssignmentRepo)
 ---
-author:
+authors:
+- Ivan Mansilla Flores, Oscar de Caralt Roy
+
+professors:
 - Blai Ras Jimenez,  Eloi Puertas
-date: Març 2023
-title: Pràctica 2 - FastAPI and Vue application (Software distribuït)
+
+date: 01/06/2023
+
+# Pràctica 2 - FastAPI and Vue application (Software distribuït)
 ---
 
 Introducció
 ============
 
-En aquesta pràctica farem una pàgina web capaç de mostrar 
-informació sobre esdeveniments esportius i reservar-ne les entrades.
-Però primer de tot desenvoluparem una REST-API capaç de proporcionar-nos la informació necessària. També desenvoluparan les funcions relacionades amb la gestió d'aquestes dades com
-afegir, eliminar o modificar les dades emmagatzemades.
+# Pràctica: Pàgina web d'esdeveniments esportius
 
-Amb aquest propòsit utilitzarem el Framework anomenat FastAPI.
+Aquest és un repositori per a la pràctica de desenvolupament d'una pàgina web capaç de mostrar informació sobre esdeveniments esportius i permetre la reserva d'entrades. Primer de tot, desenvoluparem una REST API que ens proporcionarà la informació necessària. També implementarem les funcions per gestionar aquestes dades, com ara afegir, eliminar o modificar els esdeveniments emmagatzemats.
 
-IMPORTANT
----------
+Utilitzarem el framework FastAPI per aquest propòsit.
 
-Aquest exercici guiat suposa que ja teniu alguna versió de Python 3
-instal·lada i esteu familiaritzats amb la instal·lació de paquets mitjançant pip.
+## Requisits
 
-Tingueu en compte que el pip command mostrat en aquest tutorial correspondrà a pip3 
-segons quantes versions diferents de python tingueu
-instal·lat al vostre ordinador.
+- Python 3 (recomanada la versió més recent)
+- Paquets de Python instal·lats a través de pip
+
+## Instal·lació
+
+Per començar, segueix els passos següents per instal·lar les dependències necessàries:
+
+1. Clona aquest repositori al teu ordinador.
+2. Navega fins al directori del projecte.
+3. Executa la següent comanda per instal·lar les dependències:
+
+
+  <code>pip install -r requirements.txt</code>
+
 
 Es recomana altament l'ús de la IDE [PyCharm Professional](https://www.jetbrains.com/pycharm/) per al desenvolupament d'aquesta pràctica
+
+## Execució
+Per executar el projecte, segueix els passos següents:
+
+Navega fins al directori del projecte.
+Executa la següent comanda:
+uvicorn main:app --reload
+
+Ara, la REST API està en funcionament i pots accedir-hi a través de l'adreça 
+
+http://localhost:8000.
+
+## Funcionalitats implementades:
+Hem aconseguit implementar la gran majoria d'objectius i funcionalitats que se'ns proposaven setmana a setmana
+
+## Limitacions
+
+Hem de tenir en compte que no hem aconseguit implementar completament dues funcionalitats importants:
+
+Desplegament a Azure (Deployment): No hem pogut completar el procés de desplegament de la pàgina web. No obstant això, pots executar el projecte localment seguint les instruccions anteriors per a l'execució.
+Inici de sessió (Sign In): També hem tingut dificultats per implementar completament la funcionalitat d'inici de sessió. Per tant, en aquesta versió, no és possible iniciar sessió com a usuari.
+Protecció dels endpoints: Degut a que no es pot fer login amb una account no es pot obtenir si una account és admin o no i per tant no hem pogut protegir els endpoints.
+Sessió de Test: Tot i que vam venir a la sessió de test vam ser incapaços de provar amb altra gent a causa de múltiples errors que ens donava en el que aquell moment havíem fet de deployment. La part positiva és que vam poder provar la web del grup del costat i vam veure com havia de ser la funcionalitat i ens vam adonar que el nostre disseny fet en aquell moment era una mica pobre.
+
+
+
 
 Enviament dels Exercicis
 ------------------------
@@ -68,3 +105,4 @@ Sessió 6
 Sessió de Test
 =========
 - 24 de Maig [Sessió Test](https://github.com/SoftwareDistribuitUB-2023/P2/blob/main/Sessio_Test.md)
+
